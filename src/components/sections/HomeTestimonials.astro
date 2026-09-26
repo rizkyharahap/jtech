@@ -1,0 +1,68 @@
+---
+/** Testimonials — marquee (>3 items) on desktop, swipe carousel on mobile. */
+import { getCollection } from 'astro:content';
+import type { Lang } from '../../i18n/utils';
+import { useTranslations } from '../../i18n/utils';
+import Eyebrow from '../primitives/Eyebrow.astro';
+import SectionHeading from '../primitives/SectionHeading.astro';
+import Icon from '../primitives/Icon.astro';
+
+interface Props { lang: Lang }
+const { lang } = Astro.props;
+const t = useTranslations(lang);
+
+const items = (await getCollection('testimonials', ({ data }) => data.lang === lang))
+  .sort((a, b) => a.data.order - b.data.order);
+
+const segments = [
+  { id: 'SPBU / Retail Fuel', en: 'SPBU / Retail Fuel' },
+  { id: 'Energi & Migas', en: 'Energy & Oil and Gas' },
+  { id: 'Konstruksi', en: 'Construction' },
+  { id: 'Manufaktur', en: 'Manufacturing' },
+  { id: 'Logistik', en: 'Logistics' },
+];
+---
+
+<section id="klien" class="bg-navy-50 relative overflow-hidden">
+  <div class="absolute inset-0 grid-tex opacity-40"></div>
+  <div class="wrap relative py-20 md:py-24">
+    <Eyebrow data-reveal="up">{t('testimonials.eyebrow')}</Eyebrow>
+    <SectionHeading class="max-w-2xl" data-reveal="up">{t('testimonials.title')}</SectionHeading>
+    <p data-reveal="up" style="--rv-delay:100ms" class="mt-4 max-w-xl text-navy-500 text-sm leading-relaxed">
+      {t('testimonials.note')}
+    </p>
+
+    <div class="marquee mt-12" data-marquee data-mq-dur="75s"
+         data-mq-prev={t('testimonials.prev')} data-mq-next={t('testimonials.next')} data-mq-goto={t('testimonials.goto')}>
+      <div class="marquee-track" data-marquee-track>
+        <div class="marquee-set" data-marquee-set>
+          {items.map((item) => (
+            <div class="marquee-item w-[280px] sm:w-[320px] lg:w-[350px]">
+              <blockquote class="card-dark p-7 flex flex-col h-full">
+                <Icon name="quote" size={26} class="text-gold-600 shrink-0" />
+                <p class="mt-5 text-navy-600 leading-relaxed text-[15px] flex-1">&ldquo;{item.data.quote}&rdquo;</p>
+                <footer class="mt-6 pt-5 border-t border-navy-200">
+                  <p class="text-sm font-semibold text-navy-900">{item.data.attribution}</p>
+                  <p class="text-xs text-navy-500 mt-0.5">{item.data.sector}</p>
+                </footer>
+              </blockquote>
+            </div>
+          ))}
+        </div>
+      </div>
+      <div class="mq-dots text-navy-500" role="group" aria-label={t('carousel.label')}></div>
+    </div>
+
+    <div data-reveal="up" class="mt-12 pt-8 border-t border-navy-200">
+      <p class="text-[10px] uppercase tracking-[0.16em] text-navy-500 font-bold">{t('testimonials.segments')}</p>
+      <div class="mt-4 flex flex-wrap items-center gap-x-6 gap-y-3">
+        {segments.map((s, i) => (
+          <>
+            {i > 0 && <span aria-hidden="true" class="h-1 w-1 rounded-full bg-gold-600/60"></span>}
+            <span class="text-sm text-navy-600 font-medium">{s[lang]}</span>
+          </>
+        ))}
+      </div>
+    </div>
+  </div>
+</section>

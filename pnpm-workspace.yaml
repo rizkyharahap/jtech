@@ -1,0 +1,10 @@
+# pnpm 11 build-script policy (these keys live here, not in package.json).
+# esbuild: required by Vite/Astro's bundler.
+# sharp:   required by Astro's default image service (astro:assets).
+allowBuilds:
+  esbuild: true
+  sharp: true
+
+onlyBuiltDependencies:
+  - esbuild
+  - sharp

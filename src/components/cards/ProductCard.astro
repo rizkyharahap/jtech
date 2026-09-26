@@ -1,0 +1,97 @@
+---
+/** Product grid with a category filter (inline JS, no library). */
+import { getCollection } from 'astro:content';
+import { Image } from 'astro:assets';
+import type { Lang } from '../../i18n/utils';
+import { useTranslations } from '../../i18n/utils';
+import { route } from '../../i18n/routes';
+import Icon from '../primitives/Icon.astro';
+
+interface Props {
+  lang: Lang;
+  limit?: number;
+  /**
+   * Heading level for product titles. Must match the document outline:
+   * h3 under a section h2 (home), h2 directly under the page h1 (catalog).
+   */
+  headingLevel?: 'h2' | 'h3';
+}
+const { lang, limit, headingLevel = 'h3' } = Astro.props;
+const Heading = headingLevel;
+const t = useTranslations(lang);
+
+let products = await getCollection('products', ({ data }) => data.lang === lang && !data.draft);
+products = products.sort((a, b) => a.data.order - b.data.order);
+if (limit) products = products.slice(0, limit);
+
+/**
+ * Vite can only bundle images referenced by static paths, so the collection
+ * stores a key (e.g. 'p14') and we resolve it here via import.meta.glob.
+ *
+ * NOTE: no `{ eager: true }` here on purpose. An eager glob pulls EVERY matched
+ * image into the build graph, which copied all 48 source photos into dist even
+ * though only a handful are displayed (added ~8 MB of dead weight).
+ */
+const images = import.meta.glob<{ default: ImageMetadata }>('../../assets/img/p*.{jpeg,jpg,png}');
+async function imgFor(key?: string) {
+  if (!key) return undefined;
+  const path = Object.keys(images).find((p) => p.includes(`/${key}.`));
+  if (!path) return undefined;
+  const mod = (await images[path]()) as { default: ImageMetadata };
+  return mod.default;
+}
+
+// Pre-resolve every card image once so the template stays declarative.
+const resolved = new Map<string, ImageMetadata | undefined>(
+  await Promise.all(products.map(async (pr) => [pr.id, await imgFor(pr.data.image)] as const)),
+);
+function imageFor(id: string) { return resolved.get(id); }
+
+const categories = [
+  { key: 'sparepart', label: { id: 'Sparepart & Komponen', en: 'Spare Parts' } },
+  { key: 'equipment-facility', label: { id: 'SPBU Equipment', en: 'SPBU Equipment' } },
+  { key: 'general-equipment', label: { id: 'General Equipment', en: 'General Equipment' } },
+  { key: 'operational-supplies', label: { id: 'Operational Supplies', en: 'Operational Supplies' } },
+] as const;
+---
+
+<div class="mt-9 flex flex-wrap gap-2" id="chips" data-reveal="up" style="--rv-delay:100ms">
+  <button type="button" data-f="all" class="chip btn btn-sm btn-primary">{t('products.filterAll')}</button>
+  {categories.map((c) => (
+    <button type="button" data-f={c.key} class="chip btn btn-sm btn-outline-ink">{c.label[lang]}</button>
+  ))}
+</div>
+
+<div class="mt-8 grid sm:grid-cols-2 lg:grid-cols-4 gap-5" id="pgrid" data-reveal="stagger">
+  {products.map((p) => (
+    <article class="card p-0 overflow-hidden flex flex-col" data-cat={p.data.category}>
+      <div class="aspect-[4/3] bg-navy-100 relative overflow-hidden">
+        {imageFor(p.id) ? (
+          <Image src={imageFor(p.id)!} alt={p.data.title} widths={[280, 560]} sizes="(min-width: 1024px) 25vw, 50vw" loading="lazy"
+                 class="h-full w-full object-cover opacity-90" />
+        ) : (
+          <div class="h-full w-full grid place-items-center">
+            <Icon name="box" size={34} class="text-navy-700" />
+          </div>
+        )}
+        {p.data.featured && (
+          <span class="absolute top-3 left-3 bg-gold-500 text-navy-950 text-[10px] font-bold uppercase tracking-wider px-2 py-1 rounded-sm">
+            {lang === 'id' ? 'Unggulan' : 'Featured'}
+          </span>
+        )}
+      </div>
+      <div class="p-5 flex flex-col flex-1">
+        <span class="text-[10px] uppercase tracking-[0.14em] text-gold-800 font-bold">
+          {categories.find((c) => c.key === p.data.category)?.label[lang]}
+        </span>
+        <Heading class="mt-2 font-semibold text-navy-900 leading-snug">{p.data.title}</Heading>
+        <p class="mt-2 text-xs text-navy-600 leading-relaxed flex-1">{p.data.summary}</p>
+        <div class="mt-3 flex flex-wrap gap-1.5">
+          {p.data.brand && <span class="text-[10px] text-navy-600 border border-navy-200 rounded-sm px-1.5 py-0.5">{p.data.brand}</span>}
+          {p.data.productCode && <span class="text-[10px] text-navy-600 border border-navy-200 rounded-sm px-1.5 py-0.5 specline">{p.data.productCode}</span>}
+        </div>
+        <a href={`${route(lang, 'products')}${p.data.ref}/`} class="link-gold mt-4">{t('products.rfq')} →</a>
+      </div>
+    </article>
+  ))}
+</div>

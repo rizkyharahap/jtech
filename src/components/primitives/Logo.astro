@@ -1,0 +1,19 @@
+---
+import { Image } from 'astro:assets';
+import logoDark from '../../assets/img/logo-dark.png';
+
+interface Props { tone?: 'dark' | 'light'; class?: string; alt?: string }
+const { tone = 'dark', class: cls = 'h-11 w-auto', alt = 'JTech Lawang Perkasa' } = Astro.props;
+
+/**
+ * The dark-background variant is imported statically (it is used on every page).
+ * The light variant is loaded lazily so it is only emitted when a light-tone
+ * logo is actually rendered — a static import of it added ~600 kB of PNG
+ * variants to dist that no page ever referenced.
+ */
+const src =
+  tone === 'dark'
+    ? logoDark
+    : (await import('../../assets/img/logo-light.png')).default;
+---
+<Image src={src} alt={alt} class={cls} widths={[96, 176, 264]} sizes="(min-width: 1024px) 176px, 120px" loading="eager" />

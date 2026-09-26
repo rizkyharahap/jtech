@@ -1,0 +1,39 @@
+---
+import { type Lang, useTranslations } from '../../i18n/utils';
+import { SITE, waLink } from '../../lib/site';
+import Icon from '../primitives/Icon.astro';
+const { lang } = Astro.props;
+const t = useTranslations(lang);
+const href = waLink(lang === 'id'
+  ? 'Halo JTech, saya ingin menanyakan kebutuhan produk/layanan.'
+  : 'Hello JTech, I would like to ask about your products/services.');
+---
+<div id="wa-fab" class="fixed bottom-5 right-5 z-50">
+  <div id="wa-pop" class="hidden mb-3 w-[290px] bg-white rounded-lg overflow-hidden border border-navy-200" style="box-shadow:0 18px 48px -12px rgba(11,15,18,.4)">
+    <div class="bg-wa px-4 py-3.5 flex items-start gap-3">
+      <span class="shrink-0 grid h-9 w-9 place-items-center rounded-full bg-white/20">
+        <Icon name="whatsapp" size={20} class="text-white" />
+      </span>
+      <span class="min-w-0">
+        <span class="block text-white font-bold text-sm">{t('wa.title')}</span>
+        <span class="block text-white text-[11px] mt-0.5">{t('wa.subtitle')}</span>
+      </span>
+    </div>
+    <div class="p-3.5 bg-white">
+      <p class="text-[13px] text-navy-600 leading-relaxed mb-3">{t('wa.body')}</p>
+      <a href={href} target="_blank" rel="noopener" class="btn btn-wa w-full text-[13px]">
+        <Icon name="whatsapp" size={17} />
+        {t('wa.cta')}
+      </a>
+      <a href={`tel:${SITE.phoneIntl}`} class="btn btn-sm w-full mt-2 text-navy-600 bg-transparent hover:bg-navy-100 border border-navy-200 min-h-0 py-2.5">
+        {t('wa.call')}: {SITE.phoneDisplay}
+      </a>
+    </div>
+  </div>
+
+  <button id="wa-btn" type="button" aria-label={t('wa.open')} data-label-close={t('wa.close')}
+          aria-expanded="false" aria-controls="wa-pop"
+          class="ml-auto grid h-14 w-14 place-items-center rounded-full bg-wa text-white shadow-2xl transition-transform hover:scale-105 focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-gold-500">
+    <span id="wa-icon" class="grid place-items-center"><Icon name="whatsapp" size={27} /></span>
+  </button>
+</div>

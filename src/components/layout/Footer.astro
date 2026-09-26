@@ -1,0 +1,75 @@
+---
+import { type Lang, useTranslations } from '../../i18n/utils';
+import { route } from '../../i18n/routes';
+import { SITE } from '../../lib/site';
+import Logo from '../primitives/Logo.astro';
+const { lang } = Astro.props;
+const t = useTranslations(lang);
+const year = new Date().getFullYear();
+const productLinks = [
+  { label: { id: 'Sparepart & Komponen', en: 'Spare Parts & Components' }, key: 'products' },
+  { label: { id: 'SPBU Equipment', en: 'SPBU Equipment' }, key: 'products' },
+  { label: { id: 'General Equipment', en: 'General Equipment' }, key: 'products' },
+  { label: { id: 'Operational Supplies', en: 'Operational Supplies' }, key: 'products' },
+] as const;
+const serviceLinks = [
+  { label: { id: 'Renovasi SPBU', en: 'SPBU Renovation' }, key: 'services' },
+  { label: { id: 'Totem & Signage', en: 'Totem & Signage' }, key: 'services' },
+  { label: { id: 'Maintenance & Repair', en: 'Maintenance & Repair' }, key: 'services' },
+  { label: { id: 'Customized Solutions', en: 'Customized Solutions' }, key: 'services' },
+] as const;
+const companyLinks = [
+  { label: { id: 'Tentang Kami', en: 'About Us' }, key: 'about' },
+  { label: { id: 'Proyek', en: 'Projects' }, key: 'projects' },
+  { label: { id: 'Klien', en: 'Clients' }, key: 'clients' },
+  { label: { id: 'Artikel', en: 'Articles' }, key: 'articles' },
+] as const;
+---
+<footer class="bg-steel-800 border-t border-white/15">
+  <div class="wrap py-14">
+    <div class="grid lg:grid-cols-12 gap-10">
+      <div class="lg:col-span-4" data-reveal="up">
+        <Logo tone="dark" class="h-14 w-auto" />
+        <p class="mt-5 text-sm text-steel-100 leading-relaxed max-w-xs">
+          {SITE.positioning}. {SITE.strapline}.
+        </p>
+      </div>
+      <div class="lg:col-span-2">
+        <p class="text-[10px] uppercase tracking-[0.16em] text-gold-400 font-bold">{t('footer.products')}</p>
+        <ul class="mt-4 space-y-2 text-sm text-steel-100">
+          {productLinks.map((l) => (
+            <li><a href={route(lang, l.key)} class="hover:text-gold-400 transition-colors">{l.label[lang]}</a></li>
+          ))}
+        </ul>
+      </div>
+      <div class="lg:col-span-2">
+        <p class="text-[10px] uppercase tracking-[0.16em] text-gold-400 font-bold">{t('footer.services')}</p>
+        <ul class="mt-4 space-y-2 text-sm text-steel-100">
+          {serviceLinks.map((l) => (
+            <li><a href={route(lang, l.key)} class="hover:text-gold-400 transition-colors">{l.label[lang]}</a></li>
+          ))}
+        </ul>
+      </div>
+      <div class="lg:col-span-2">
+        <p class="text-[10px] uppercase tracking-[0.16em] text-gold-400 font-bold">{t('footer.company')}</p>
+        <ul class="mt-4 space-y-2 text-sm text-steel-100">
+          {companyLinks.map((l) => (
+            <li><a href={route(lang, l.key)} class="hover:text-gold-400 transition-colors">{l.label[lang]}</a></li>
+          ))}
+        </ul>
+      </div>
+      <div class="lg:col-span-2">
+        <p class="text-[10px] uppercase tracking-[0.16em] text-gold-400 font-bold">{t('footer.contact')}</p>
+        <ul class="mt-4 space-y-2 text-sm text-steel-100">
+          <li><a href={`tel:${SITE.phoneIntl}`} class="hover:text-gold-400 transition-colors specline">{SITE.phoneDisplay}</a></li>
+          <li><a href={`mailto:${SITE.email}`} class="hover:text-gold-400 transition-colors break-all">{SITE.email}</a></li>
+          <li class="leading-relaxed">{SITE.addressShort[lang]}<br />West Java 16360</li>
+        </ul>
+      </div>
+    </div>
+    <div class="mt-12 pt-7 border-t border-white/15 flex flex-wrap items-center justify-between gap-4">
+      <p class="text-xs text-steel-100">© {year} {SITE.legalName}. {t('footer.rights')}</p>
+      <p class="text-xs text-steel-100 specline">{t('footer.legal')}</p>
+    </div>
+  </div>
+</footer>

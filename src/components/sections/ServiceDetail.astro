@@ -1,0 +1,102 @@
+---
+import BaseLayout from '../../layouts/BaseLayout.astro';
+import CtaBanner from './CtaBanner.astro';
+import RfqForm from '../forms/RfqForm.astro';
+import Icon from '../primitives/Icon.astro';
+import { getCollection } from 'astro:content';
+import { useTranslations, type Lang } from '../../i18n/utils';
+import { route } from '../../i18n/routes';
+
+interface Props { lang: Lang; entry: any }
+const { lang, entry } = Astro.props;
+const data = entry.data;
+const t = useTranslations(lang);
+const others = (await getCollection('services', ({ data: d }) =>
+  d.lang === lang && !d.draft && d.slug !== data.slug)).sort((a, b) => a.data.order - b.data.order).slice(0, 3);
+---
+<BaseLayout lang={lang} title={data.title} description={data.summary} path={`/services/${data.slug}/`}>
+  <section class="bg-steel-700 relative overflow-hidden">
+    <div class="absolute inset-0 grid-tex-ink opacity-70"></div>
+    <div class="wrap relative py-12 md:py-16">
+      <nav class="flex flex-wrap items-center gap-2 text-[11px] text-steel-100 mb-6" aria-label="Breadcrumb">
+        <a href={route(lang, 'home')} class="hover:text-gold-400 transition-colors inline-block py-1.5">{t('common.breadcrumbHome')}</a>
+        <span aria-hidden="true">/</span>
+        <a href={route(lang, 'services')} class="hover:text-gold-400 transition-colors inline-block py-1.5">{t('pages.services.eyebrow')}</a>
+        <span aria-hidden="true">/</span>
+        <span class="text-white" aria-current="page">{data.title}</span>
+      </nav>
+      <span class="grid h-12 w-12 place-items-center rounded-sm bg-white/10 border border-white/25 text-gold-400" data-reveal="up">
+        <Icon name={data.icon as any} size={24} />
+      </span>
+      <h1 data-reveal="up" style="--rv-delay:80ms" class="mt-5 max-w-3xl text-white font-semibold leading-[1.1] text-[clamp(1.9rem,4vw,3rem)]">
+        {data.title}
+      </h1>
+      <p data-reveal="up" style="--rv-delay:140ms" class="mt-5 max-w-2xl text-steel-100 leading-relaxed">{data.summary}</p>
+    </div>
+  </section>
+
+  <section class="bg-white">
+    <div class="wrap py-14 md:py-16 grid lg:grid-cols-3 gap-12">
+      <div class="lg:col-span-2 space-y-10">
+        {data.scope.length > 0 && (
+          <div data-reveal="up">
+            <h2 class="text-lg font-semibold text-navy-900">{t('pages.service.scope')}</h2>
+            <ul class="mt-4 grid sm:grid-cols-2 gap-3">
+              {data.scope.map((s: string) => (
+                <li class="flex gap-3 text-sm text-navy-600 leading-relaxed border-t-2 border-gold-600 pt-3">
+                  {s}
+                </li>
+              ))}
+            </ul>
+          </div>
+        )}
+
+        {data.deliverables.length > 0 && (
+          <div data-reveal="up">
+            <h2 class="text-lg font-semibold text-navy-900">{t('pages.service.deliverables')}</h2>
+            <ul class="mt-4 space-y-2">
+              {data.deliverables.map((d: string) => (
+                <li class="flex gap-3 text-sm text-navy-600 leading-relaxed">
+                  <Icon name="arrow-right" size={15} class="mt-0.5 shrink-0 text-gold-800" />
+                  {d}
+                </li>
+              ))}
+            </ul>
+          </div>
+        )}
+
+        <div class="rounded-sm bg-navy-100 border border-navy-200 p-6" data-reveal="up">
+          <p class="text-sm text-navy-600 leading-relaxed">
+            {lang === 'id'
+              ? 'Ruang lingkup setiap pekerjaan disesuaikan dengan kondisi dan kebutuhan proyek. Sampaikan detail kebutuhan Anda untuk penawaran yang lebih tepat.'
+              : 'The scope of every engagement is tailored to the site and project requirements. Share your details for a more precise quotation.'}
+          </p>
+        </div>
+
+        <a href={route(lang, 'services')} class="link-gold" data-reveal="up">← {t('pages.service.back')}</a>
+      </div>
+
+      <div class="lg:col-span-1">
+        <RfqForm lang={lang} subject={data.title} compact />
+      </div>
+    </div>
+  </section>
+
+  {others.length > 0 && (
+    <section class="bg-navy-100 border-t border-navy-200">
+      <div class="wrap py-14">
+        <h2 class="text-lg font-semibold text-navy-900" data-reveal="up">{t('pages.service.other')}</h2>
+        <div class="mt-8 grid sm:grid-cols-2 lg:grid-cols-3 gap-5" data-reveal="stagger">
+          {others.map((o: any) => (
+            <a href={`${route(lang, 'services')}${o.data.slug}/`} class="card p-5 block">
+              <h3 class="font-semibold text-navy-900 leading-snug">{o.data.title}</h3>
+              <p class="mt-2 text-xs text-navy-600 leading-relaxed">{o.data.summary}</p>
+            </a>
+          ))}
+        </div>
+      </div>
+    </section>
+  )}
+
+  <CtaBanner lang={lang} />
+</BaseLayout>

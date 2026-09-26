@@ -1,0 +1,12 @@
+---
+import ProductDetail from '../../../components/catalog/ProductDetail.astro';
+import { getCollection } from 'astro:content';
+
+export async function getStaticPaths() {
+  const entries = await getCollection('products', ({ data }) => !data.draft && data.lang === 'en');
+  return entries.map((entry) => ({ params: { ref: entry.data.slug }, props: { entry } }));
+}
+interface Props { entry: any }
+const { entry } = Astro.props;
+---
+<ProductDetail lang="en" entry={entry} />

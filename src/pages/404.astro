@@ -1,0 +1,58 @@
+---
+import BaseLayout from '../layouts/BaseLayout.astro';
+import Button from '../components/primitives/Button.astro';
+import { useTranslations } from '../i18n/utils';
+import { SITE, waLink } from '../lib/site';
+import { route } from '../i18n/routes';
+
+const lang = 'id' as const;
+const t = useTranslations(lang);
+
+/**
+ * 404 is served for BOTH locales by the host (GH Pages/Vercel serve a single
+ * /404.html). So it shows both languages and links only to routes that exist —
+ * previously it linked to /en/404/, which is not a page.
+ */
+// Links go through route() so they carry both locale and BASE_URL.
+const links = (['home', 'products', 'services', 'projects', 'articles', 'contact'] as const).map((k) => ({
+  href: route(lang, k),
+  label: k === 'home' ? 'Beranda / Home' : k.charAt(0).toUpperCase() + k.slice(1),
+}));
+---
+<BaseLayout lang={lang} title={t('notfound.title')} description={t('notfound.body')} path="/404/" noindex>
+  <section class="bg-white">
+    <div class="wrap py-24 md:py-28">
+      <div class="max-w-2xl" data-reveal="up">
+        <p class="num-light text-5xl specline">404</p>
+        <h1 class="mt-5 text-3xl font-semibold text-navy-900">Halaman tidak ditemukan</h1>
+        <p class="mt-2 text-lg text-navy-600">Page not found</p>
+
+        <p class="mt-6 text-navy-600 leading-relaxed">
+          Halaman yang Anda cari tidak tersedia atau sudah dipindahkan. Silakan pilih tujuan berikut.
+        </p>
+        <p class="mt-1 text-sm text-navy-600 leading-relaxed">
+          The page you are looking for is unavailable or has been moved. Please pick a destination below.
+        </p>
+
+        <div class="mt-9 flex flex-wrap gap-3">
+          <Button href={route(lang, 'home')}>{t('notfound.cta')}</Button>
+          <Button href={waLink()} variant="outline-ink" external>WhatsApp</Button>
+        </div>
+
+        <nav class="mt-12 border-t border-navy-200 pt-7" aria-label="Site pages">
+          <ul class="flex flex-wrap gap-x-6 gap-y-2 text-sm">
+            {links.map((l) => (
+              <li><a href={l.href} class="text-navy-600 hover:text-gold-800 transition-colors">{l.label}</a></li>
+            ))}
+          </ul>
+        </nav>
+
+        <p class="mt-8 flex flex-wrap items-center gap-x-3 gap-y-1 text-xs text-navy-600 specline">
+          <a href={`tel:${SITE.phoneIntl}`} class="hover:text-gold-800 transition-colors">{SITE.phoneDisplay}</a>
+          <span aria-hidden="true" class="h-1 w-1 rounded-full bg-gold-600/60"></span>
+          <a href={`mailto:${SITE.email}`} class="hover:text-gold-800 transition-colors break-all">{SITE.email}</a>
+        </p>
+      </div>
+    </div>
+  </section>
+</BaseLayout>

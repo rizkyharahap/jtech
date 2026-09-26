@@ -1,0 +1,40 @@
+# --- Node / Astro ---
+node_modules/
+dist/
+.astro/
+.vercel/
+.netlify/
+.output/
+
+# --- Package manager ---
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+pnpm-debug.log*
+.pnpm-store/
+
+# --- Env ---
+.env
+.env.*
+!.env.example
+
+# --- Editor / OS ---
+# macOS recreates .DS_Store constantly; Astro copies anything under src/ and
+# public/, so these are also blocked by a build gate in scripts/audit-links.mjs.
+.DS_Store
+**/.DS_Store
+Thumbs.db
+desktop.ini
+*.swp
+*~
+.idea/
+.vscode/*
+!.vscode/extensions.json
+
+# --- Source images parked by scripts/prune-assets.mjs ---
+# Not deleted, just excluded from the build until a page uses them.
+resources
+
+# --- Hermes agent artifacts: keep plans (documentation), ignore the rest ---
+.hermes/*
+!.hermes/plans/

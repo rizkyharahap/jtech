@@ -1,0 +1,43 @@
+---
+import { type Lang, switchLangUrl, otherLang } from '../../i18n/utils';
+
+interface Props { lang: Lang; label: string }
+const { lang, label } = Astro.props;
+const target = otherLang(lang);
+
+// Build the set of paths that actually exist, so the toggle never links to a
+// missing page (the 404 page has no EN counterpart, for example).
+const pages = import.meta.glob('../../pages/**/*.astro');
+const known = new Set(
+  Object.keys(pages).map((p) =>
+    p
+      .replace('../../pages', '')
+      .replace(/\/index\.astro$/, '/')
+      .replace(/\.astro$/, '/')
+      .replace(/\[(\w+)\]/, ''),
+  ),
+);
+const href = switchLangUrl(Astro.url, target, (path) => {
+  const rel = path.replace(import.meta.env.BASE_URL, '/');
+  return known.has(rel);
+});
+
+/**
+ * WCAG 2.5.3 (label in name) requires the accessible name to contain the
+ * visible label. The two language codes are separate <span>s, so axe cannot
+ * match a contiguous string against aria-label — instead we expose the label
+ * through visually-hidden text, which produces a matching accessible name
+ * without overriding it.
+ */
+const activeLabel = lang === 'id' ? 'ID' : 'EN';
+const targetLabel = target === 'en' ? 'EN' : 'ID';
+---
+<a href={href}
+   class="flex items-center rounded border border-navy-200 overflow-hidden text-[11px] font-bold">
+  <span class="sr-only">{label}</span>
+  <span aria-hidden="true"
+        class:list={['px-2.5 py-1.5', lang === 'id' ? 'bg-gold-500 text-navy-950' : 'text-navy-600']}>ID</span>
+  <span aria-hidden="true"
+        class:list={['px-2.5 py-1.5', lang === 'en' ? 'bg-gold-500 text-navy-950' : 'text-navy-600']}>EN</span>
+  <span class="sr-only">{` ${activeLabel} ${targetLabel}`}</span>
+</a>

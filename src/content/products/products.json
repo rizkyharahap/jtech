@@ -1,0 +1,522 @@
+[
+  {
+    "id": "promo-totem.id",
+    "lang": "id",
+    "ref": "promo-totem",
+    "slug": "promo-totem",
+    "order": 1,
+    "title": "Pilar / Totem Promosi",
+    "category": "equipment-facility",
+    "summary": "Media promosi tegak mandiri (free-standing display) berbingkai logam merah dengan panel akrilik transparan untuk materi pemasaran.",
+    "specs": [],
+    "application": [],
+    "featured": false,
+    "pertaminaRelated": true,
+    "image": "p13",
+    "gallery": [
+      "p13"
+    ],
+    "availability": "on-request",
+    "draft": false,
+    "productCode": "PT-0100"
+  },
+  {
+    "id": "promo-totem.en",
+    "lang": "en",
+    "ref": "promo-totem",
+    "slug": "promo-totem",
+    "order": 1,
+    "title": "Promotional Pillar / Totem",
+    "category": "equipment-facility",
+    "summary": "Free-standing display with red metal frame and transparent acrylic panel for marketing materials.",
+    "specs": [],
+    "application": [],
+    "featured": false,
+    "pertaminaRelated": true,
+    "image": "p13",
+    "gallery": [
+      "p13"
+    ],
+    "availability": "on-request",
+    "draft": false,
+    "productCode": "PT-0100"
+  },
+  {
+    "id": "neon-box.id",
+    "lang": "id",
+    "ref": "neon-box",
+    "slug": "neon-box",
+    "order": 2,
+    "title": "Neon Box",
+    "category": "equipment-facility",
+    "summary": "Kotak lampu gantung dua sisi dengan bingkai.",
+    "specs": [],
+    "application": [],
+    "featured": false,
+    "pertaminaRelated": true,
+    "image": "p17",
+    "gallery": [
+      "p17",
+      "p19"
+    ],
+    "availability": "on-request",
+    "draft": false,
+    "productCode": "NB-0200"
+  },
+  {
+    "id": "neon-box.en",
+    "lang": "en",
+    "ref": "neon-box",
+    "slug": "neon-box",
+    "order": 2,
+    "title": "Neon Box",
+    "category": "equipment-facility",
+    "summary": "Two-sided hanging lightbox with frame.",
+    "specs": [],
+    "application": [],
+    "featured": false,
+    "pertaminaRelated": true,
+    "image": "p17",
+    "gallery": [
+      "p17",
+      "p19"
+    ],
+    "availability": "on-request",
+    "draft": false,
+    "productCode": "NB-0200"
+  },
+  {
+    "id": "facility-signage.id",
+    "lang": "id",
+    "ref": "facility-signage",
+    "slug": "facility-signage",
+    "order": 3,
+    "title": "Rambu Fasilitas & Petunjuk SPBU",
+    "category": "equipment-facility",
+    "summary": "Set papan rambu petunjuk fasilitas berwarna merah khas Pertamina (Mushola, Tempat Wudhu, Toilet Jongkok/Duduk, dan himbauan hemat air).",
+    "specs": [],
+    "application": [],
+    "featured": false,
+    "pertaminaRelated": true,
+    "image": "p11",
+    "gallery": [
+      "p11"
+    ],
+    "availability": "on-request",
+    "draft": false,
+    "productCode": "FS-0300"
+  },
+  {
+    "id": "facility-signage.en",
+    "lang": "en",
+    "ref": "facility-signage",
+    "slug": "facility-signage",
+    "order": 3,
+    "title": "SPBU Facility & Direction Signage",
+    "category": "equipment-facility",
+    "summary": "Set of Pertamina-branded facility direction signs (Mushola, Wudu, Toilet, water conservation).",
+    "specs": [],
+    "application": [],
+    "featured": false,
+    "pertaminaRelated": true,
+    "image": "p11",
+    "gallery": [
+      "p11"
+    ],
+    "availability": "on-request",
+    "draft": false,
+    "productCode": "FS-0300"
+  },
+  {
+    "id": "panel-display.id",
+    "lang": "id",
+    "ref": "panel-display",
+    "slug": "panel-display",
+    "order": 4,
+    "title": "Panel Display",
+    "category": "sparepart",
+    "summary": "Modul display harga, volume, dan harga per liter dengan keypad preset terintegrasi serta tombol darurat (Emergency Stop).",
+    "specs": [],
+    "application": [],
+    "featured": true,
+    "pertaminaRelated": true,
+    "image": "p14",
+    "gallery": [
+      "p14",
+      "p20"
+    ],
+    "availability": "on-request",
+    "draft": false,
+    "productCode": "PD-0400"
+  },
+  {
+    "id": "panel-display.en",
+    "lang": "en",
+    "ref": "panel-display",
+    "slug": "panel-display",
+    "order": 4,
+    "title": "Panel Display",
+    "category": "sparepart",
+    "summary": "Price, volume, and price-per-liter display module with integrated preset keypad and emergency stop button.",
+    "specs": [],
+    "application": [],
+    "featured": true,
+    "pertaminaRelated": true,
+    "image": "p14",
+    "gallery": [
+      "p14",
+      "p20"
+    ],
+    "availability": "on-request",
+    "draft": false,
+    "productCode": "PD-0400"
+  },
+  {
+    "id": "trien-hose.id",
+    "lang": "id",
+    "ref": "trien-hose",
+    "slug": "trien-hose",
+    "order": 5,
+    "title": "TRIEN Hose",
+    "category": "sparepart",
+    "summary": "Selang fleksibel berwarna biru berstandar industri dengan ulir spiral baja untuk transfer cairan minyak bumi bertekanan tinggi.",
+    "specs": [],
+    "application": [],
+    "featured": false,
+    "pertaminaRelated": false,
+    "image": "p18",
+    "gallery": [
+      "p18"
+    ],
+    "availability": "on-request",
+    "draft": false,
+    "productCode": "TH-0500"
+  },
+  {
+    "id": "trien-hose.en",
+    "lang": "en",
+    "ref": "trien-hose",
+    "slug": "trien-hose",
+    "order": 5,
+    "title": "TRIEN Hose",
+    "category": "sparepart",
+    "summary": "Blue flexible industrial-standard hose with steel spiral wire for high-pressure petroleum transfer.",
+    "specs": [],
+    "application": [],
+    "featured": false,
+    "pertaminaRelated": false,
+    "image": "p18",
+    "gallery": [
+      "p18"
+    ],
+    "availability": "on-request",
+    "draft": false,
+    "productCode": "TH-0500"
+  },
+  {
+    "id": "keypad.id",
+    "lang": "id",
+    "ref": "keypad",
+    "slug": "keypad",
+    "order": 6,
+    "title": "Keypad",
+    "category": "sparepart",
+    "summary": "Papan tombol preset lokal (Local Preset Keyboard) dengan pilihan warna bodi merah dan putih, dilengkapi tombol darurat merah.",
+    "specs": [],
+    "application": [],
+    "featured": false,
+    "pertaminaRelated": true,
+    "image": "p29",
+    "gallery": [
+      "p29"
+    ],
+    "availability": "on-request",
+    "draft": false,
+    "productCode": "KP-0600"
+  },
+  {
+    "id": "keypad.en",
+    "lang": "en",
+    "ref": "keypad",
+    "slug": "keypad",
+    "order": 6,
+    "title": "Keypad",
+    "category": "sparepart",
+    "summary": "Local preset keyboard available in red and white body colors, with red emergency stop button.",
+    "specs": [],
+    "application": [],
+    "featured": false,
+    "pertaminaRelated": true,
+    "image": "p29",
+    "gallery": [
+      "p29"
+    ],
+    "availability": "on-request",
+    "draft": false,
+    "productCode": "KP-0600"
+  },
+  {
+    "id": "prover-tank.id",
+    "lang": "id",
+    "ref": "prover-tank",
+    "slug": "prover-tank",
+    "order": 7,
+    "title": "Prover Tank",
+    "category": "sparepart",
+    "summary": "Tangki ukur silinder berbahan stainless steel dengan kaca ukur presisi tinggi untuk pengujian takaran dispenser BBM.",
+    "specs": [],
+    "application": [],
+    "featured": false,
+    "pertaminaRelated": false,
+    "image": "p21",
+    "gallery": [
+      "p21"
+    ],
+    "availability": "on-request",
+    "draft": false,
+    "productCode": "PT-0700"
+  },
+  {
+    "id": "prover-tank.en",
+    "lang": "en",
+    "ref": "prover-tank",
+    "slug": "prover-tank",
+    "order": 7,
+    "title": "Prover Tank",
+    "category": "sparepart",
+    "summary": "Cylindrical stainless steel measuring tank with high-precision gauge glass for dispenser testing.",
+    "specs": [],
+    "application": [],
+    "featured": false,
+    "pertaminaRelated": false,
+    "image": "p21",
+    "gallery": [
+      "p21"
+    ],
+    "availability": "on-request",
+    "draft": false,
+    "productCode": "PT-0700"
+  },
+  {
+    "id": "fuel-nozzle.id",
+    "lang": "id",
+    "ref": "fuel-nozzle",
+    "slug": "fuel-nozzle",
+    "order": 8,
+    "title": "Nozel Pengisian Bahan Bakar",
+    "category": "sparepart",
+    "summary": "Nozel otomatis dengan mekanisme pegas pengaman dan pegangan ergonomis.",
+    "specs": [],
+    "application": [],
+    "featured": false,
+    "pertaminaRelated": false,
+    "image": "p22",
+    "gallery": [
+      "p22"
+    ],
+    "availability": "on-request",
+    "draft": false,
+    "productCode": "FN-0800"
+  },
+  {
+    "id": "fuel-nozzle.en",
+    "lang": "en",
+    "ref": "fuel-nozzle",
+    "slug": "fuel-nozzle",
+    "order": 8,
+    "title": "Fuel Filling Nozzle",
+    "category": "sparepart",
+    "summary": "Automatic nozzle with safety spring mechanism and ergonomic handle.",
+    "specs": [],
+    "application": [],
+    "featured": false,
+    "pertaminaRelated": false,
+    "image": "p22",
+    "gallery": [
+      "p22"
+    ],
+    "availability": "on-request",
+    "draft": false,
+    "productCode": "FN-0800"
+  },
+  {
+    "id": "flow-meter.id",
+    "lang": "id",
+    "ref": "flow-meter",
+    "slug": "flow-meter",
+    "order": 9,
+    "title": "Flow Meter",
+    "category": "sparepart",
+    "summary": "Unit pengukur aliran bahan bakar (Flow Measurement Transducer) berakurasi tinggi.",
+    "specs": [],
+    "application": [],
+    "featured": false,
+    "pertaminaRelated": false,
+    "image": "p23",
+    "gallery": [
+      "p23"
+    ],
+    "availability": "on-request",
+    "draft": false,
+    "productCode": "FM-0900"
+  },
+  {
+    "id": "flow-meter.en",
+    "lang": "en",
+    "ref": "flow-meter",
+    "slug": "flow-meter",
+    "order": 9,
+    "title": "Flow Meter",
+    "category": "sparepart",
+    "summary": "High-accuracy fuel flow measurement transducer.",
+    "specs": [],
+    "application": [],
+    "featured": false,
+    "pertaminaRelated": false,
+    "image": "p23",
+    "gallery": [
+      "p23"
+    ],
+    "availability": "on-request",
+    "draft": false,
+    "productCode": "FM-0900"
+  },
+  {
+    "id": "camlock-adapter.id",
+    "lang": "id",
+    "ref": "camlock-adapter",
+    "slug": "camlock-adapter",
+    "order": 10,
+    "title": "Camlock Adapter",
+    "category": "sparepart",
+    "summary": "Konektor sambungan berbahan logam paduan dengan tuas pengunci pegas untuk selang bongkar muat BBM.",
+    "specs": [],
+    "application": [],
+    "featured": false,
+    "pertaminaRelated": false,
+    "image": "p25",
+    "gallery": [
+      "p25"
+    ],
+    "availability": "on-request",
+    "draft": false,
+    "productCode": "CA-1000"
+  },
+  {
+    "id": "camlock-adapter.en",
+    "lang": "en",
+    "ref": "camlock-adapter",
+    "slug": "camlock-adapter",
+    "order": 10,
+    "title": "Camlock Adapter",
+    "category": "sparepart",
+    "summary": "Metal alloy connector with spring-loaded locking lever for petroleum hose connections.",
+    "specs": [],
+    "application": [],
+    "featured": false,
+    "pertaminaRelated": false,
+    "image": "p25",
+    "gallery": [
+      "p25"
+    ],
+    "availability": "on-request",
+    "draft": false,
+    "productCode": "CA-1000"
+  },
+  {
+    "id": "pos-payment.id",
+    "lang": "id",
+    "ref": "pos-payment",
+    "slug": "pos-payment",
+    "order": 11,
+    "title": "Terminal Pembayaran & POS Nirkabel",
+    "category": "equipment-facility",
+    "summary": "Perangkat pembayaran cerdas (Smart Mobile Payment Terminal) dengan printer termal terintegrasi dan kamera, serta terminal POS nirkabel berbasis Android dengan layar sentuh penuh dan pemindai pembayaran digital.",
+    "specs": [],
+    "application": [],
+    "featured": false,
+    "pertaminaRelated": true,
+    "image": "p15",
+    "gallery": [
+      "p15",
+      "p24"
+    ],
+    "availability": "on-request",
+    "draft": false,
+    "productCode": "PP-1100"
+  },
+  {
+    "id": "pos-payment.en",
+    "lang": "en",
+    "ref": "pos-payment",
+    "slug": "pos-payment",
+    "order": 11,
+    "title": "Payment Terminal & Wireless POS",
+    "category": "equipment-facility",
+    "summary": "Smart mobile payment terminal with integrated thermal printer and camera, plus Android-based wireless POS with full touchscreen and digital payment scanner.",
+    "specs": [],
+    "application": [],
+    "featured": false,
+    "pertaminaRelated": true,
+    "image": "p15",
+    "gallery": [
+      "p15",
+      "p24"
+    ],
+    "availability": "on-request",
+    "draft": false,
+    "productCode": "PP-1100"
+  },
+  {
+    "id": "fire-extinguisher.id",
+    "lang": "id",
+    "ref": "fire-extinguisher",
+    "slug": "fire-extinguisher",
+    "order": 12,
+    "title": "Tabung Pemadam Api",
+    "category": "equipment-facility",
+    "summary": "Rangkaian tabung pemadam api serbaguna berkualitas tinggi untuk kelas kebakaran A, B, C, dan elektrik.",
+    "specs": [
+      {
+        "label": "Kapasitas tersedia",
+        "value": "6 KG, 9 KG, 10 KG, 12 KG"
+      }
+    ],
+    "application": [],
+    "featured": false,
+    "pertaminaRelated": false,
+    "image": "p16",
+    "gallery": [
+      "p16"
+    ],
+    "availability": "on-request",
+    "draft": false,
+    "productCode": "FE-1200"
+  },
+  {
+    "id": "fire-extinguisher.en",
+    "lang": "en",
+    "ref": "fire-extinguisher",
+    "slug": "fire-extinguisher",
+    "order": 12,
+    "title": "Fire Extinguisher",
+    "category": "equipment-facility",
+    "summary": "High-quality versatile fire extinguisher for classes A, B, C, and electrical fires.",
+    "specs": [
+      {
+        "label": "Available capacities",
+        "value": "6 KG, 9 KG, 10 KG, 12 KG"
+      }
+    ],
+    "application": [],
+    "featured": false,
+    "pertaminaRelated": false,
+    "image": "p16",
+    "gallery": [
+      "p16"
+    ],
+    "availability": "on-request",
+    "draft": false,
+    "productCode": "FE-1200"
+  }
+]

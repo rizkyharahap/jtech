@@ -1,0 +1,11 @@
+---
+import BaseLayout from '../../layouts/BaseLayout.astro';
+import HomeSections from '../../components/sections/HomeSections.astro';
+const lang = 'en' as const;
+const title = 'Business Partner for Products, Services & Project Solutions';
+const description =
+  'PT JTech Lawang Perkasa supplies products, equipment, spare parts, totem & signage renovation and project solutions for SPBU, energy and business operations across Indonesia.';
+---
+<BaseLayout lang={lang} title={title} description={description} path="/">
+  <HomeSections lang={lang} />
+</BaseLayout>

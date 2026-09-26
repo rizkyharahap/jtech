@@ -1,0 +1,72 @@
+---
+import { type Lang, useTranslations } from '../../i18n/utils';
+import { SITE, waLink } from '../../lib/site';
+import Icon from '../primitives/Icon.astro';
+
+interface Props {
+  lang: Lang;
+  /** Prefills the requirement detail + uses the product/service as the subject. */
+  subject?: string;
+  compact?: boolean;
+}
+const { lang, subject, compact = false } = Astro.props;
+const t = useTranslations(lang);
+const field = 'w-full bg-white border border-navy-200 rounded-sm px-3 py-2.5 text-sm text-navy-900 placeholder-navy-400 focus:border-gold-600 focus:outline-none transition-colors';
+const label = 'block text-[11px] uppercase tracking-wider text-navy-600 font-bold mb-1.5';
+const waHref = waLink(
+  subject
+    ? (lang === 'id' ? `Halo JTech, saya ingin menanyakan: ${subject}` : `Hello JTech, I would like to ask about: ${subject}`)
+    : undefined,
+);
+---
+<div class="bg-white border border-navy-200 rounded-sm p-7" data-reveal="right" style="--rv-delay:120ms">
+  <h3 class="text-navy-900 font-semibold">{t('form.title')}</h3>
+  {subject && <p class="mt-2 text-xs text-gold-800 font-semibold">{subject}</p>}
+  <p class="mt-2 text-xs text-ink-400">{t('form.helper')}</p>
+
+  <form class="mt-6 space-y-4" data-rfq
+        data-invalid={t('form.invalidEmail')}
+        action={`mailto:${SITE.email}`} method="post" enctype="text/plain">
+    <div class="grid sm:grid-cols-2 gap-4">
+      <label class="block">
+        <span class={label}>{t('form.name')}</span>
+        <input name="name" type="text" required placeholder={t('form.namePh')} class={field} />
+      </label>
+      <label class="block">
+        <span class={label}>{t('form.company')}</span>
+        <input name="company" type="text" placeholder={t('form.companyPh')} class={field} />
+      </label>
+    </div>
+    <div class="grid sm:grid-cols-2 gap-4">
+      <label class="block">
+        <span class={label}>{t('form.email')}</span>
+        <input name="email" type="email" required placeholder={t('form.emailPh')} class={field} />
+      </label>
+      <label class="block">
+        <span class={label}>{t('form.phone')}</span>
+        <input name="phone" type="tel" placeholder={t('form.phonePh')} class={field} />
+      </label>
+    </div>
+    <label class="block">
+      <span class={label}>{t('form.need')}</span>
+      <select name="need" class={field}>
+        <option>{t('form.needProduct')}</option>
+        <option>{t('form.needService')}</option>
+        <option>{t('form.needProject')}</option>
+        <option>{t('form.needOther')}</option>
+      </select>
+    </label>
+    <label class="block">
+      <span class={label}>{t('form.detail')}</span>
+      <textarea name="detail" rows={compact ? 3 : 4} placeholder={t('form.detailPh')} class={field}></textarea>
+    </label>
+    <button type="submit" class="btn btn-on-dark w-full">
+      {t('form.submit')}
+      <Icon name="arrow-right" size={16} />
+    </button>
+    <a href={waHref} target="_blank" rel="noopener" class="btn btn-wa w-full text-[13px]">
+      <Icon name="whatsapp" size={16} />
+      {t('wa.cta')}
+    </a>
+  </form>
+</div>

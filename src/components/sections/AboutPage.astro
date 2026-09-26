@@ -1,0 +1,139 @@
+---
+import BaseLayout from '../../layouts/BaseLayout.astro';
+import PageHero from '../layout/PageHero.astro';
+import CtaBanner from './CtaBanner.astro';
+import Eyebrow from '../primitives/Eyebrow.astro';
+import SectionHeading from '../primitives/SectionHeading.astro';
+import Icon from '../primitives/Icon.astro';
+import { SITE } from '../../lib/site';
+import { useTranslations, type Lang } from '../../i18n/utils';
+
+interface Props { lang: Lang }
+const { lang } = Astro.props;
+const t = useTranslations(lang);
+
+const vision = {
+  id: 'Menjadi partner bisnis terpercaya dalam menyediakan produk, layanan, dan solusi untuk mendukung kebutuhan operasional, pemeliharaan, dan pengembangan berbagai sektor industri di Indonesia.',
+  en: 'To be a trusted business partner in providing products, services and solutions supporting the operational, maintenance and development needs of industrial sectors across Indonesia.',
+};
+const mission = [
+  { id: 'Menyediakan produk, peralatan, dan layanan yang sesuai dengan kebutuhan customer.', en: 'Provide products, equipment and services that match client requirements.' },
+  { id: 'Memberikan solusi yang mendukung kebutuhan operasional, maintenance, dan pengembangan fasilitas customer.', en: 'Deliver solutions supporting operational, maintenance and facility development needs.' },
+  { id: 'Memberikan pelayanan yang responsif, profesional, dan berorientasi pada kebutuhan customer.', en: 'Deliver responsive, professional service oriented around client needs.' },
+  { id: 'Mengembangkan hubungan bisnis jangka panjang dengan customer dan mitra.', en: 'Build long-term business relationships with clients and partners.' },
+  { id: 'Memperluas cakupan bisnis secara berkelanjutan dengan tetap mengutamakan kualitas, integritas, dan keandalan.', en: 'Expand business scope sustainably while prioritising quality, integrity and reliability.' },
+];
+const focus = [
+  { icon: 'sun', id: 'SPBU & Energy Solutions', en: 'SPBU & Energy Solutions', d_id: 'Produk, equipment, maintenance, renovasi, dan kebutuhan pendukung fasilitas SPBU serta proyek terkait industri energi.', d_en: 'Products, equipment, maintenance, renovation and supporting needs for SPBU facilities and related energy projects.' },
+  { icon: 'cart', id: 'Trading & Equipment', en: 'Trading & Equipment', d_id: 'Penyediaan mesin, peralatan, perlengkapan, sparepart, dan kebutuhan operasional.', d_en: 'Supply of machinery, tools, equipment, spare parts and operational needs.' },
+  { icon: 'building', id: 'Construction & Facility Development', en: 'Construction & Facility Development', d_id: 'Dukungan kebutuhan konstruksi, renovasi, pengembangan, dan pemeliharaan fasilitas.', d_en: 'Support for construction, renovation, development and facility maintenance.' },
+  { icon: 'layers', id: 'Business & Operational Supplies', en: 'Business & Operational Supplies', d_id: 'Berbagai kebutuhan operasional sesuai permintaan dan karakteristik customer.', d_en: 'Operational supplies tailored to each client requirement.' },
+];
+const legal = [
+  { label: t('pages.about.entity'), value: SITE.entityType },
+  { label: t('pages.about.investment'), value: SITE.investmentStatus },
+  { label: t('pages.about.scale'), value: SITE.businessScale[lang] },
+  { label: t('pages.about.founded'), value: SITE.foundedLabel[lang] },
+];
+---
+<BaseLayout lang={lang} title={t('pages.about.title')} description={SITE.positioning + '. ' + SITE.strapline + '.'} path="/about/">
+  <PageHero
+    lang={lang}
+    eyebrow={t('pages.about.eyebrow')} title={t('pages.about.title')} description={`${SITE.positioning}. ${SITE.strapline}.`} />
+
+  <section class="bg-white">
+    <div class="wrap py-16 md:py-20">
+      <div class="max-w-3xl space-y-4 text-[15px] text-navy-600 leading-[1.8]" data-reveal="up">
+        <p>
+          {lang === 'id'
+            ? 'PT JTech Lawang Perkasa merupakan perusahaan yang bergerak dalam penyediaan produk dan layanan yang mendukung kebutuhan operasional serta pengembangan fasilitas Stasiun Pengisian Bahan Bakar Umum (SPBU). Kami menyediakan berbagai kebutuhan customer, mulai dari renovasi dan peremajaan SPBU, renovasi totem dan signage, penyediaan sparepart dan peralatan, hingga perlengkapan pendukung lainnya.'
+            : 'PT JTech Lawang Perkasa provides products and services supporting the operational needs and facility development of fuel stations (SPBU). We supply a wide range of client needs, from SPBU renovation and refurbishment, totem and signage renewal, spare parts and equipment, through to other supporting supplies.'}
+        </p>
+        <p>
+          {lang === 'id'
+            ? 'JTech melayani segmen Business-to-Business (B2B) maupun customer individu. Segmen B2B mencakup perusahaan, pemilik atau pengelola SPBU, serta pihak lain yang memiliki kebutuhan terkait fasilitas dan operasional SPBU.'
+            : 'JTech serves both Business-to-Business (B2B) and individual clients. The B2B segment covers companies, SPBU owners and operators, and others with fuel-station facility and operational needs.'}
+        </p>
+        <p>
+          {lang === 'id'
+            ? 'Sebagai perusahaan yang masih berada dalam tahap pengembangan, kami terus membangun basis pelanggan, memperluas jangkauan pasar, serta mengembangkan layanan dan strategi pemasaran untuk menjangkau lebih banyak customer di Indonesia.'
+            : 'As a company still in its growth stage, we continue to build our client base, widen market reach and develop our services and go-to-market approach to reach more customers across Indonesia.'}
+        </p>
+      </div>
+
+      <div class="mt-14 grid md:grid-cols-2 gap-8" data-reveal="stagger">
+        <article class="bg-white border border-navy-200 rounded-sm p-7">
+          <Eyebrow>{t('pages.about.vision')}</Eyebrow>
+          <p class="mt-4 text-navy-600 leading-[1.8]">{vision[lang]}</p>
+        </article>
+        <article class="bg-white border border-navy-200 rounded-sm p-7">
+          <Eyebrow>{t('pages.about.mission')}</Eyebrow>
+          <ol class="mt-4 space-y-3">
+            {mission.map((m, i) => (
+              <li class="flex gap-3 text-sm text-navy-600 leading-relaxed">
+                <span class="num-light text-xs specline shrink-0 pt-0.5">{String(i + 1).padStart(2, '0')}</span>
+                {m[lang]}
+              </li>
+            ))}
+          </ol>
+        </article>
+      </div>
+    </div>
+  </section>
+
+  <section class="bg-navy-100 border-y border-navy-200">
+    <div class="wrap py-16 md:py-20">
+      <Eyebrow data-reveal="up">{t('pages.about.focus')}</Eyebrow>
+      <SectionHeading class="max-w-2xl" data-reveal="up">
+        {lang === 'id' ? 'Empat pilar layanan yang kami jalankan' : 'Four service pillars we deliver'}
+      </SectionHeading>
+      <div class="mt-10 grid sm:grid-cols-2 lg:grid-cols-4 gap-5" data-reveal="stagger">
+        {focus.map((f) => (
+          <article class="card p-6 flex flex-col">
+            <Icon name={f.icon as any} size={22} class="text-gold-800" />
+            <h3 class="mt-4 font-semibold text-navy-900 leading-snug">{f[lang]}</h3>
+            <p class="mt-2 text-sm text-navy-600 leading-relaxed">{lang === 'id' ? f.d_id : f.d_en}</p>
+          </article>
+        ))}
+      </div>
+    </div>
+  </section>
+
+  <section class="bg-white">
+    <div class="wrap py-16 md:py-20 grid lg:grid-cols-2 gap-12">
+      <div data-reveal="left">
+        <Eyebrow>{t('pages.about.legal')}</Eyebrow>
+        <dl class="mt-6 divide-y divide-navy-200 border-y border-navy-200">
+          {legal.map((l) => (
+            <div class="grid sm:grid-cols-2 gap-1 py-3.5">
+              <dt class="text-[11px] uppercase tracking-[0.12em] text-navy-600 font-bold">{l.label}</dt>
+              <dd class="text-sm text-navy-900">{l.value}</dd>
+            </div>
+          ))}
+          <div class="grid sm:grid-cols-2 gap-1 py-3.5">
+            <dt class="text-[11px] uppercase tracking-[0.12em] text-navy-600 font-bold">{t('pages.about.contact')}</dt>
+            <dd class="text-sm text-navy-900 leading-relaxed">
+              {SITE.address[lang]}<br />
+              <a href={`tel:${SITE.phoneIntl}`} class="specline hover:text-gold-800 transition-colors">{SITE.phoneDisplay}</a><br />
+              <a href={`mailto:${SITE.email}`} class="hover:text-gold-800 transition-colors break-all">{SITE.email}</a>
+            </dd>
+          </div>
+        </dl>
+      </div>
+
+      <div data-reveal="right" style="--rv-delay:120ms">
+        <Eyebrow>{t('pages.about.kbli')}</Eyebrow>
+        <ul class="mt-6 space-y-3">
+          {SITE.kbli.map((k) => (
+            <li class="flex gap-3 text-sm">
+              <span class="font-bold text-gold-800 specline shrink-0">{k.code}</span>
+              <span class="text-navy-600 leading-relaxed">{k.label[lang]}</span>
+            </li>
+          ))}
+        </ul>
+      </div>
+    </div>
+  </section>
+
+  <CtaBanner lang={lang} />
+</BaseLayout>

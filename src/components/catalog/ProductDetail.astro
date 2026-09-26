@@ -1,0 +1,195 @@
+---
+import BaseLayout from '../../layouts/BaseLayout.astro';
+import SpecTable from '../catalog/SpecTable.astro';
+import RfqForm from '../forms/RfqForm.astro';
+import JsonLd from '../seo/JsonLd.astro';
+import Icon from '../primitives/Icon.astro';
+import { Image } from 'astro:assets';
+import { getCollection } from 'astro:content';
+import { useTranslations, type Lang } from '../../i18n/utils';
+import { route } from '../../i18n/routes';
+import { product as productSchema } from '../../lib/schema';
+
+interface Props { lang: Lang; entry: any }
+const { lang, entry } = Astro.props;
+const data = entry.data;
+const t = useTranslations(lang);
+
+
+const categoryLabels: Record<string, { id: string; en: string }> = {
+  sparepart: { id: 'Sparepart & Komponen', en: 'Spare Parts & Components' },
+  'equipment-facility': { id: 'SPBU Equipment & Fasilitas', en: 'SPBU Equipment & Facility' },
+  'general-equipment': { id: 'General Equipment', en: 'General Equipment' },
+  'operational-supplies': { id: 'Operational Supplies', en: 'Operational Supplies' },
+};
+
+// Resolve the image key stored in the collection to a bundled asset.
+const images = import.meta.glob<{ default: ImageMetadata }>('../../assets/img/p*.{jpeg,jpg,png}');
+async function imgFor(key?: string) {
+  if (!key) return undefined;
+  const path = Object.keys(images).find((p) => p.includes(`/${key}.`));
+  if (!path) return undefined;
+  const mod = (await images[path]()) as { default: ImageMetadata };
+  return mod.default;
+}
+
+// Merge primary image + gallery, preserving order and removing duplicates.
+const imageKeys = [...new Set([data.image, ...(data.gallery || [])].filter(Boolean))];
+const resolvedImages = new Map<string, ImageMetadata>();
+for (const key of imageKeys) {
+  const img = await imgFor(key);
+  if (img) resolvedImages.set(key, img);
+}
+const hero = data.image ? resolvedImages.get(data.image) : resolvedImages.values().next().value;
+
+const related = (await getCollection('products', ({ data: d }) =>
+  d.lang === lang && !d.draft && d.category === data.category && d.slug !== data.slug,
+)).slice(0, 3);
+
+const meta = [
+  { label: t('pages.product.category'), value: categoryLabels[data.category]?.[lang] ?? data.category },
+  ...(data.brand ? [{ label: t('pages.product.brand'), value: data.brand }] : []),
+  ...(data.model ? [{ label: t('pages.product.brand'), value: data.model }] : []),
+  ...(data.productCode ? [{ label: t('pages.product.code'), value: data.productCode }] : []),
+  { label: t('pages.product.availability'), value: t(`pages.product.avail.${data.availability}` as any) },
+];
+
+const jsonLd = productSchema(
+  {
+    name: data.title,
+    description: data.summary,
+    sku: data.productCode,
+    brand: data.brand,
+    url: `/products/${data.slug}/`,
+  },
+  Astro.site,
+);
+---
+<BaseLayout
+  lang={lang}
+  title={data.title}
+  description={data.summary}
+  path={`/products/${data.slug}/`}
+  image={hero?.src}
+  type="article"
+>
+  <JsonLd data={jsonLd} />
+
+  <section class="bg-steel-700 relative overflow-hidden">
+    <div class="absolute inset-0 grid-tex-ink opacity-70"></div>
+    <div class="wrap relative py-12 md:py-16">
+      <nav class="flex flex-wrap items-center gap-2 text-[11px] text-steel-100 mb-6" aria-label="Breadcrumb">
+        <a href={route(lang, 'home')} class="hover:text-gold-400 transition-colors inline-block py-1.5">{t('common.breadcrumbHome')}</a>
+        <span aria-hidden="true">/</span>
+        <a href={route(lang, 'products')} class="hover:text-gold-400 transition-colors inline-block py-1.5">{t('pages.products.eyebrow')}</a>
+        <span aria-hidden="true">/</span>
+        <span class="text-white" aria-current="page">{data.title}</span>
+      </nav>
+
+      <div class="grid lg:grid-cols-2 gap-10 items-start">
+        <div data-reveal="left">
+          <span class="text-[10px] uppercase tracking-[0.18em] text-gold-400 font-bold">
+            {categoryLabels[data.category]?.[lang]}
+          </span>
+          <h1 class="mt-4 text-white font-semibold leading-[1.1] text-[clamp(1.9rem,4vw,3rem)]">{data.title}</h1>
+          <p class="mt-5 text-steel-100 leading-relaxed max-w-xl">{data.summary}</p>
+
+          {data.pertaminaRelated && (
+            <p class="mt-5 inline-flex items-center gap-2 text-[11px] uppercase tracking-wider text-gold-400 font-bold border border-gold-600/40 rounded-sm px-3 py-1.5">
+              <Icon name="shield" size={13} />
+              {t('pages.product.pertamina')}
+            </p>
+          )}
+        </div>
+
+        <div data-reveal="right" style="--rv-delay:120ms" class="space-y-4">
+          <div class="aspect-[4/3] bg-steel-600/30 rounded-sm overflow-hidden border border-white/25">
+            {hero ? (
+              <Image src={hero} alt={data.title} widths={[480, 960]} sizes="(min-width: 1024px) 50vw, 100vw"
+                     class="h-full w-full object-cover" />
+            ) : (
+              <div class="h-full w-full grid place-items-center">
+                <Icon name="box" size={44} class="text-navy-700" />
+              </div>
+            )}
+          </div>
+          {resolvedImages.size > 1 && (
+            <div class="grid grid-cols-3 gap-2">
+              {Array.from(resolvedImages.entries()).map(([key, img]) => (
+                <div class="aspect-square bg-steel-600/20 rounded-sm overflow-hidden border border-white/15">
+                  <Image src={img} alt={`${data.title} — ${key}`} widths={[120, 240]} sizes="100px"
+                         class="h-full w-full object-cover opacity-80 hover:opacity-100 transition-opacity" />
+                </div>
+              ))}
+            </div>
+          )}
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <section class="bg-white">
+    <div class="wrap py-14 md:py-16 grid lg:grid-cols-3 gap-12">
+      <div class="lg:col-span-2 space-y-10">
+        <div data-reveal="up">
+          <h2 class="text-lg font-semibold text-navy-900">{t('pages.product.specs')}</h2>
+          <div class="mt-4">
+            <SpecTable rows={data.specs} emptyText={t('pages.product.specsEmpty')} />
+          </div>
+        </div>
+
+        {data.application.length > 0 && (
+          <div data-reveal="up">
+            <h2 class="text-lg font-semibold text-navy-900">{t('pages.product.application')}</h2>
+            <ul class="mt-4 space-y-2">
+              {data.application.map((a: string) => (
+                <li class="flex gap-3 text-sm text-navy-600 leading-relaxed">
+                  <Icon name="arrow-right" size={15} class="mt-0.5 shrink-0 text-gold-800" />
+                  {a}
+                </li>
+              ))}
+            </ul>
+          </div>
+        )}
+
+        <div data-reveal="up">
+          <dl class="grid sm:grid-cols-2 gap-x-8 gap-y-4">
+            {meta.map((m) => (
+              <div>
+                <dt class="text-[10px] uppercase tracking-[0.14em] text-navy-600 font-bold">{m.label}</dt>
+                <dd class="mt-1 text-sm text-navy-900 specline">{m.value}</dd>
+              </div>
+            ))}
+          </dl>
+        </div>
+
+        <a href={route(lang, 'products')} class="link-gold" data-reveal="up">
+          ← {t('pages.product.back')}
+        </a>
+      </div>
+
+      <div class="lg:col-span-1">
+        <RfqForm lang={lang} subject={`${data.title}${data.productCode ? ` (${data.productCode})` : ''}`} compact />
+      </div>
+    </div>
+  </section>
+
+  {related.length > 0 && (
+    <section class="bg-navy-100 border-t border-navy-200">
+      <div class="wrap py-14 md:py-16">
+        <h2 class="text-lg font-semibold text-navy-900" data-reveal="up">{t('pages.product.related')}</h2>
+        <div class="mt-8 grid sm:grid-cols-2 lg:grid-cols-3 gap-5" data-reveal="stagger">
+          {related.map((r: any) => (
+            <a href={`${route(lang, 'products')}${r.data.slug}/`} class="card p-5 block">
+              <span class="text-[10px] uppercase tracking-[0.14em] text-gold-800 font-bold">
+                {categoryLabels[r.data.category]?.[lang]}
+              </span>
+              <h3 class="mt-2 font-semibold text-navy-900 leading-snug">{r.data.title}</h3>
+              <p class="mt-2 text-xs text-navy-600 leading-relaxed">{r.data.summary}</p>
+            </a>
+          ))}
+        </div>
+      </div>
+    </section>
+  )}
+</BaseLayout>

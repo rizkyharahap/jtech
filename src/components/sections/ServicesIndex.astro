@@ -1,0 +1,40 @@
+---
+import BaseLayout from '../../layouts/BaseLayout.astro';
+import PageHero from '../layout/PageHero.astro';
+import CtaBanner from './CtaBanner.astro';
+import Icon from '../primitives/Icon.astro';
+import { getCollection } from 'astro:content';
+import { useTranslations, type Lang } from '../../i18n/utils';
+import { route } from '../../i18n/routes';
+
+interface Props { lang: Lang }
+const { lang } = Astro.props;
+const t = useTranslations(lang);
+const services = (await getCollection('services', ({ data }) => data.lang === lang && !data.draft))
+  .sort((a, b) => a.data.order - b.data.order);
+---
+<BaseLayout lang={lang} title={t('pages.services.title')} description={t('pages.services.desc')} path="/services/">
+  <PageHero
+    lang={lang}
+    eyebrow={t('pages.services.eyebrow')} title={t('pages.services.title')} description={t('pages.services.desc')} />
+
+  <section class="bg-white">
+    <div class="wrap py-16 md:py-20">
+      <div class="grid sm:grid-cols-2 lg:grid-cols-3 gap-px bg-navy-100 border border-navy-200 rounded-sm overflow-hidden" data-reveal="stagger">
+        {services.map((s, i) => (
+          <a href={`${route(lang, 'services')}${s.data.slug}/`} class="bg-white hover:bg-white p-7 transition-colors group flex flex-col">
+            <div class="flex items-start justify-between">
+              <span class="num-light text-xl specline">{String(i + 1).padStart(2, '0')}</span>
+              <Icon name={s.data.icon as any} size={22} class="text-gold-800" />
+            </div>
+            <h2 class="mt-5 text-lg font-semibold text-navy-900 leading-snug">{s.data.title}</h2>
+            <p class="mt-3 text-sm text-navy-600 leading-relaxed flex-1">{s.data.summary}</p>
+            <span class="link-gold mt-4">{lang === 'id' ? 'Selengkapnya' : 'Learn more'} →</span>
+          </a>
+        ))}
+      </div>
+    </div>
+  </section>
+
+  <CtaBanner lang={lang} />
+</BaseLayout>

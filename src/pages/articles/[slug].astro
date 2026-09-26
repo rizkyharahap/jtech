@@ -1,0 +1,12 @@
+---
+import ArticleDetail from '../../components/sections/ArticleDetail.astro';
+import { getCollection } from 'astro:content';
+
+export async function getStaticPaths() {
+  const entries = await getCollection('articles', ({ data }) => !data.draft && data.lang === 'id');
+  return entries.map((entry) => ({ params: { slug: entry.data.slug }, props: { entry } }));
+}
+interface Props { entry: any }
+const { entry } = Astro.props;
+---
+<ArticleDetail lang="id" entry={entry} />

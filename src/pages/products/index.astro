@@ -1,0 +1,38 @@
+---
+import BaseLayout from '../../layouts/BaseLayout.astro';
+import PageHero from '../../components/layout/PageHero.astro';
+import CtaBanner from '../../components/sections/CtaBanner.astro';
+import ProductCard from '../../components/cards/ProductCard.astro';
+import { getCollection } from 'astro:content';
+import { useTranslations } from '../../i18n/utils';
+
+// Route owns its locale (default locale = id, served at the root).
+const lang = 'id' as const;
+const t = useTranslations(lang);
+const products = (await getCollection('products', ({ data }) => data.lang === lang && !data.draft))
+  .sort((a, b) => a.data.order - b.data.order);
+---
+<BaseLayout
+  lang={lang}
+  title={t('pages.products.title')}
+  description={t('pages.products.desc')}
+  path="/products/"
+>
+  <PageHero
+    lang={lang}
+    eyebrow={t('pages.products.eyebrow')}
+    title={t('pages.products.title')}
+    description={t('pages.products.desc')}
+  />
+
+  <section class="bg-white">
+    <div class="wrap py-16 md:py-20">
+      <p class="text-sm text-navy-600" data-reveal="up">
+        {products.length} {t('pages.products.count')}
+      </p>
+      <ProductCard lang={lang} headingLevel="h2" />
+    </div>
+  </section>
+
+  <CtaBanner lang={lang} />
+</BaseLayout>

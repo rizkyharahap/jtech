@@ -1,0 +1,27 @@
+{
+  "name": "jtech-company-profile",
+  "type": "module",
+  "version": "0.1.0",
+  "private": true,
+  "scripts": {
+    "dev": "astro dev",
+    "start": "astro dev",
+    "build": "astro build",
+    "preview": "astro preview",
+    "astro": "astro",
+    "check": "node scripts/audit-links.mjs && node scripts/check-no-client-names.mjs",
+    "verify": "pnpm build && pnpm check",
+    "assets:prune": "node scripts/prune-assets.mjs",
+    "assets:og": "node scripts/make-og.mjs"
+  },
+  "dependencies": {
+    "@astrojs/sitemap": "^3.7.4",
+    "@tailwindcss/vite": "^4.3.3",
+    "astro": "^7.3.3",
+    "sharp": "^0.35.4",
+    "tailwindcss": "^4.3.3"
+  },
+  "devDependencies": {
+    "typescript": "^5.9.3"
+  }
+}

@@ -1,0 +1,473 @@
+---
+/**
+ * Home page sections. Content is data-driven so the ID and EN routes share
+ * the exact same components (see src/pages/en/index.astro).
+ */
+import { Image } from 'astro:assets';
+import type { Lang } from '../../i18n/utils';
+import { useTranslations } from '../../i18n/utils';
+import { route } from '../../i18n/routes';
+import { SITE, waLink } from '../../lib/site';
+import Eyebrow from '../primitives/Eyebrow.astro';
+import SectionHeading from '../primitives/SectionHeading.astro';
+import Button from '../primitives/Button.astro';
+import Icon from '../primitives/Icon.astro';
+import ProductCard from '../cards/ProductCard.astro';
+import HomeTestimonials from './HomeTestimonials.astro';
+import HomeArticles from './HomeArticles.astro';
+
+interface Props { lang: Lang }
+const { lang } = Astro.props;
+const t = useTranslations(lang);
+
+const focus = [
+  { icon: 'sun', title: { id: 'SPBU & Energy Solutions', en: 'SPBU & Energy Solutions' },
+    body: { id: 'Produk, equipment, maintenance, renovasi, dan kebutuhan pendukung fasilitas SPBU serta proyek terkait industri energi.',
+            en: 'Products, equipment, maintenance, renovation and supporting needs for SPBU facilities and related energy projects.' },
+    link: 'services' as const, cta: { id: 'Lihat layanan', en: 'View services' } },
+  { icon: 'cart', title: { id: 'Trading & Equipment', en: 'Trading & Equipment' },
+    body: { id: 'Penyediaan mesin, peralatan, perlengkapan, sparepart, dan kebutuhan operasional berbagai sektor.',
+            en: 'Supply of machinery, tools, equipment, spare parts and operational needs across sectors.' },
+    link: 'products' as const, cta: { id: 'Lihat produk', en: 'View products' } },
+  { icon: 'building', title: { id: 'Construction & Facility', en: 'Construction & Facility' },
+    body: { id: 'Dukungan kebutuhan konstruksi, renovasi, pengembangan, dan pemeliharaan fasilitas.',
+            en: 'Support for construction, renovation, development and facility maintenance.' },
+    link: 'projects' as const, cta: { id: 'Lihat proyek', en: 'View projects' } },
+  { icon: 'layers', title: { id: 'Business & Operational Supplies', en: 'Business & Operational Supplies' },
+    body: { id: 'Berbagai kebutuhan operasional sesuai permintaan dan karakteristik customer.',
+            en: 'A wide range of operational supplies tailored to each client&rsquo;s requirements.' },
+    link: 'contact' as const, cta: { id: 'Tanya kebutuhan', en: 'Ask your needs' } },
+];
+
+const services = [
+  { n: '01', icon: 'building', title: { id: 'SPBU Renovation & Refurbishment', en: 'SPBU Renovation & Refurbishment' },
+    body: { id: 'Renovasi, peremajaan, dan pengembangan fasilitas SPBU sesuai kebutuhan proyek.',
+            en: 'Renovation, refurbishment and development of SPBU facilities to project requirements.' } },
+  { n: '02', icon: 'doc', title: { id: 'Totem & Signage Renovation', en: 'Totem & Signage Renovation' },
+    body: { id: 'Pengerjaan dan penyediaan totem, signage, price board, serta kebutuhan visual fasilitas SPBU.',
+            en: 'Fabrication and supply of totems, signage, price boards and visual needs for SPBU facilities.' } },
+  { n: '03', icon: 'wrench', title: { id: 'Maintenance & Repair', en: 'Maintenance & Repair' },
+    body: { id: 'Dukungan pemeliharaan dan perbaikan equipment maupun fasilitas, termasuk penggantian sparepart.',
+            en: 'Maintenance and repair support for equipment and facilities, including spare-part replacement.' } },
+  { n: '04', icon: 'box', title: { id: 'Equipment & Component Supply', en: 'Equipment & Component Supply' },
+    body: { id: 'Penyediaan equipment, sparepart, dan komponen teknis untuk operasional dan maintenance.',
+            en: 'Supply of equipment, spare parts and technical components for operations and maintenance.' } },
+  { n: '05', icon: 'layers', title: { id: 'Project & Facility Support', en: 'Project & Facility Support' },
+    body: { id: 'Dukungan proyek, konstruksi, pengembangan, dan fasilitas sesuai ruang lingkup pekerjaan.',
+            en: 'Project, construction, development and facility support within the agreed scope of work.' } },
+  { n: '06', icon: 'sun', title: { id: 'Customized Solutions', en: 'Customized Solutions' },
+    body: { id: 'Solusi yang disesuaikan dengan spesifikasi, kebutuhan, dan kondisi proyek customer.',
+            en: 'Solutions tailored to the specification, needs and site conditions of each client.' } },
+];
+
+const why = [
+  { n: '01', title: { id: 'SPBU & Energy Experience', en: 'SPBU & Energy Experience' },
+    body: { id: 'Pengalaman menangani kebutuhan dan proyek pada fasilitas SPBU, termasuk peremajaan dan renovasi totem.',
+            en: 'Experience handling SPBU facility needs and projects, including totem refurbishment and renovation.' } },
+  { n: '02', title: { id: 'Products & Services', en: 'Products & Services' },
+    body: { id: 'Sparepart, komponen, equipment, perlengkapan, dan layanan pendukung operasional.',
+            en: 'Spare parts, components, equipment, supplies and operational support services.' } },
+  { n: '03', title: { id: 'Project-Based Solutions', en: 'Project-Based Solutions' },
+    body: { id: 'Solusi sesuai karakteristik, kebutuhan, dan ruang lingkup masing-masing proyek.',
+            en: 'Solutions matched to each project&rsquo;s characteristics, needs and scope.' } },
+  { n: '04', title: { id: 'Customer-Oriented', en: 'Customer-Oriented' },
+    body: { id: 'Produk dan layanan disesuaikan untuk customer B2B maupun individu.',
+            en: 'Products and services adapted for both B2B and individual clients.' } },
+  { n: '05', title: { id: 'Business Partnership', en: 'Business Partnership' },
+    body: { id: 'Hubungan bisnis jangka panjang melalui dukungan operasional berkelanjutan.',
+            en: 'Long-term business relationships through sustained operational support.' } },
+  { n: '06', title: { id: 'Responsif & Profesional', en: 'Responsive & Professional' },
+    body: { id: 'Pelayanan yang responsif dan berorientasi pada kebutuhan customer.',
+            en: 'Responsive service oriented around what the client actually needs.' } },
+];
+
+const otherProjects = [
+  { id: 'Jasa Repair Bejana', en: 'Vessel Repair Service', desc: { id: 'Perbaikan dan repair bejana pada sektor industri.', en: 'Repair and reconditioning of vessels for industrial clients.' } },
+  { id: 'Jasa Sertifikasi', en: 'Certification Service', desc: { id: 'Pendampingan dan pengurusan kebutuhan sertifikasi.', en: 'Assistance and handling of certification requirements.' } },
+  { id: 'Perbaikan / Service Console', en: 'Console Repair / Service', desc: { id: 'Perbaikan dan service console peralatan.', en: 'Repair and servicing of equipment consoles.' } },
+  { id: 'Service Seftibar & ATG', en: 'Seftibar & ATG Service', desc: { id: 'Pemeliharaan dan service peralatan seftibar & ATG.', en: 'Maintenance and servicing of seftibar & ATG equipment.' } },
+];
+
+// Hero + project imagery — real JTech SPBU work photos, imported so Astro
+// can hash and optimise them (a raw '/src/...' string would break the build).
+import heroImg from '../../assets/img/p01.jpeg';
+import projMain from '../../assets/img/p07.jpeg';
+import proj2 from '../../assets/img/p12.jpeg';
+import proj3 from '../../assets/img/p17.jpeg';
+import proj4 from '../../assets/img/p24.jpeg';
+import proj5 from '../../assets/img/p29.jpeg';
+const projectGallery = [
+  { img: proj2, alt: { id: 'Renovasi signage SPBU', en: 'SPBU signage renovation' } },
+  { img: proj3, alt: { id: 'Pekerjaan fasilitas SPBU', en: 'SPBU facility works' } },
+  { img: proj4, alt: { id: 'Signage price board', en: 'Price board signage' } },
+  { img: proj5, alt: { id: 'Pekerjaan pendukung fasilitas', en: 'Supporting facility works' } },
+];
+---
+
+{/* ============ 01 · HERO ============ */}
+<section id="top" class="relative bg-steel-700 overflow-hidden">
+  <Image src={heroImg} alt="" aria-hidden="true" widths={[960, 1600]} sizes="100vw"
+         class="absolute inset-0 h-full w-full object-cover opacity-[0.30]" />
+  <div class="absolute inset-0" style="background:linear-gradient(to bottom right, rgba(27,58,92,.86), rgba(42,74,107,.72) 45%, rgba(53,92,132,.78))"></div>
+  <div class="absolute inset-0 grid-tex-ink opacity-70"></div>
+  <div class="absolute left-0 top-0 h-full w-px bg-gradient-to-b from-transparent via-gold-500/70 to-transparent"></div>
+
+  <div class="wrap relative py-20 md:py-28 lg:py-32">
+    <Eyebrow tone="steel" data-reveal="up">{t('hero.eyebrow')}</Eyebrow>
+
+    <h1 data-reveal="up" style="--rv-delay:80ms"
+        class="mt-6 max-w-4xl text-white font-semibold leading-[1.06] text-[clamp(2.25rem,5.6vw,4.25rem)]">
+      {lang === 'id' ? (
+        <>Business Partner for <span class="text-gold-400">Products, Services</span> &amp; Project Solutions</>
+      ) : (
+        <>Business Partner for <span class="text-gold-400">Products, Services</span> &amp; Project Solutions</>
+      )}
+    </h1>
+
+    <p data-reveal="up" style="--rv-delay:160ms" class="mt-6 max-w-2xl text-steel-100 text-lg leading-relaxed">
+      {SITE.strapline}.
+    </p>
+    <p data-reveal="up" style="--rv-delay:200ms" class="mt-3 max-w-2xl text-steel-100/90 leading-relaxed">
+      {lang === 'id'
+        ? 'Penyediaan produk, peralatan, sparepart, renovasi, dan solusi berbasis proyek untuk mendukung operasional, maintenance, dan pengembangan fasilitas customer di seluruh Indonesia.'
+        : 'Supply of products, equipment, spare parts, renovation and project-based solutions supporting the operations, maintenance and development of client facilities across Indonesia.'}
+    </p>
+
+    <div data-reveal="up" style="--rv-delay:260ms" class="mt-9 flex flex-wrap gap-3">
+      <Button href={route(lang, 'contact')} variant="gold">
+        {t('hero.ctaPrimary')}
+        <Icon name="arrow-right" size={16} />
+      </Button>
+      <Button href={route(lang, 'products')} variant="outline-light">{t('hero.ctaSecondary')}</Button>
+    </div>
+
+    <dl data-reveal="up" style="--rv-delay:340ms"
+        class="mt-16 grid grid-cols-2 lg:grid-cols-4 gap-px bg-white/40 border border-white/40 rounded-sm overflow-hidden">
+      {[
+        { k: t('hero.stat.projects'), v: '31+' },
+        { k: t('hero.stat.focus'), v: '4' },
+        { k: t('hero.stat.kbli'), v: String(SITE.kbli.length) },
+        { k: t('hero.stat.services'), v: '6' },
+      ].map((s) => (
+        <div class="bg-white px-6 py-5">
+          <dt class="text-[11px] uppercase tracking-[0.14em] text-navy-500">{s.k}</dt>
+          <dd class="num text-3xl mt-1 specline">{s.v}</dd>
+        </div>
+      ))}
+    </dl>
+  </div>
+</section>
+
+<div class="seam"></div>
+
+{/* ============ 02 · ABOUT INTRO ============ */}
+<section class="bg-white">
+  <div class="wrap py-20 md:py-24 grid lg:grid-cols-12 gap-12">
+    <div class="lg:col-span-5" data-reveal="left">
+      <Eyebrow>{t('about.eyebrow')}</Eyebrow>
+      <SectionHeading>{t('about.title')}</SectionHeading>
+    </div>
+    <div class="lg:col-span-7 lg:pt-1" data-reveal="right" style="--rv-delay:120ms">
+      <p class="text-navy-600 leading-[1.75]">
+        {lang === 'id'
+          ? 'PT JTech Lawang Perkasa bergerak dalam penyediaan produk dan layanan yang mendukung kebutuhan operasional serta pengembangan fasilitas SPBU — mulai dari renovasi dan peremajaan, renovasi totem & signage, penyediaan sparepart dan peralatan, hingga perlengkapan pendukung lainnya.'
+          : 'PT JTech Lawang Perkasa supplies products and services supporting the operational needs and development of SPBU facilities — from renovation and refurbishment, totem & signage renewal, spare parts and equipment, through to other supporting supplies.'}
+      </p>
+      <p class="mt-5 text-navy-600 leading-[1.75]">
+        {lang === 'id'
+          ? 'JTech tidak dikunci sebagai perusahaan SPBU: kami adalah partner produk, layanan, dan solusi proyek dengan SPBU & energi sebagai salah satu expertise utama.'
+          : 'JTech is not confined to fuel stations: we are a partner for products, services and project solutions, with SPBU & energy as one of our core areas of expertise.'}
+      </p>
+      <div class="mt-8 grid sm:grid-cols-3 gap-6 border-t border-navy-200 pt-8">
+        {[
+          { n: '01', h: { id: 'B2B & Individu', en: 'B2B & Individuals' }, p: { id: 'Melayani perusahaan, pengelola SPBU, maupun customer individu.', en: 'Serving companies, SPBU operators and individual clients.' } },
+          { n: '02', h: { id: 'Solusi Terukur', en: 'Tailored Solutions' }, p: { id: 'Disesuaikan dengan spesifikasi dan ruang lingkup proyek.', en: 'Matched to the specification and scope of each project.' } },
+          { n: '03', h: { id: 'Kemitraan Jangka Panjang', en: 'Long-term Partnership' }, p: { id: 'Kualitas, integritas, dan keandalan sebagai dasar.', en: 'Grounded in quality, integrity and reliability.' } },
+        ].map((i) => (
+          <div>
+            <div class="num-light text-sm specline">{i.n}</div>
+            <div class="mt-1 font-semibold text-navy-900 text-sm">{i.h[lang]}</div>
+            <p class="mt-1 text-xs text-navy-600 leading-relaxed">{i.p[lang]}</p>
+          </div>
+        ))}
+      </div>
+    </div>
+  </div>
+</section>
+
+{/* ============ 03 · FOCUS ============ */}
+<section class="bg-navy-100 border-y border-navy-200">
+  <div class="wrap py-20 md:py-24">
+    <Eyebrow data-reveal="up">{t('focus.eyebrow')}</Eyebrow>
+    <SectionHeading class="max-w-2xl" data-reveal="up">{t('focus.title')}</SectionHeading>
+    <div data-reveal="stagger" class="mt-12 grid sm:grid-cols-2 lg:grid-cols-4 gap-5">
+      {focus.map((f, i) => (
+        <article class="card p-6 flex flex-col">
+          <div class="num-light text-2xl specline">{String(i + 1).padStart(2, '0')}</div>
+          <h3 class="mt-4 text-lg font-semibold text-navy-900">{f.title[lang]}</h3>
+          <p class="mt-3 text-sm text-navy-600 leading-relaxed flex-1" set:html={f.body[lang]} />
+          <div class="mt-5 h-px bg-navy-100"></div>
+          <a href={route(lang, f.link)} class="link-gold mt-4">{f.cta[lang]} →</a>
+        </article>
+      ))}
+    </div>
+  </div>
+</section>
+
+{/* ============ 04 · PRODUCTS ============ */}
+<section id="produk" class="bg-white">
+  <div class="wrap py-20 md:py-24">
+    <div class="flex flex-wrap items-end justify-between gap-6">
+      <div data-reveal="up">
+        <Eyebrow>{t('products.eyebrow')}</Eyebrow>
+        <SectionHeading class="max-w-2xl">{t('products.title')}</SectionHeading>
+        <p class="mt-4 max-w-xl text-navy-600 text-sm leading-relaxed">
+          {lang === 'id'
+            ? 'Setiap produk dilengkapi spesifikasi, brand/model, kode produk, dan fungsi — diarahkan ke Request Quotation untuk ketersediaan dan penawaran harga.'
+            : 'Each product lists specification, brand/model, product code and function — routed to Request Quotation for availability and pricing.'}
+        </p>
+      </div>
+      <a href={route(lang, 'products')} class="btn btn-outline-ink btn-sm">{t('products.all')}</a>
+    </div>
+    <ProductCard lang={lang} />
+  </div>
+</section>
+
+{/* ============ 05 · SERVICES (dark) ============ */}
+<section id="layanan" class="bg-navy-100 relative overflow-hidden">
+  <div class="absolute inset-0 grid-tex opacity-50"></div>
+  <div class="wrap relative py-20 md:py-24">
+    <Eyebrow data-reveal="up">{t('services.eyebrow')}</Eyebrow>
+    <SectionHeading class="max-w-2xl" data-reveal="up">{t('services.title')}</SectionHeading>
+    <div class="mt-12 grid sm:grid-cols-2 lg:grid-cols-3 gap-4 rounded-sm">
+      {services.map((s) => (
+        <article class="bg-white p-7 hover:bg-navy-50 transition-colors group border border-navy-200">
+          <div class="flex items-start justify-between">
+            <span class="num text-xl specline">{s.n}</span>
+            <Icon name={s.icon as any} size={22} class="text-gold-700 group-hover:text-gold-800 transition-colors" />
+          </div>
+          <h3 class="mt-5 text-lg font-semibold text-navy-900 leading-snug">{s.title[lang]}</h3>
+          <p class="mt-3 text-sm text-navy-500 leading-relaxed">{s.body[lang]}</p>
+        </article>
+      ))}
+    </div>
+  </div>
+</section>
+
+{/* ============ 06 · PROJECTS ============ */}
+<section id="proyek" class="bg-white">
+  <div class="wrap py-20 md:py-24">
+    <div class="flex flex-wrap items-end justify-between gap-6">
+      <div data-reveal="up">
+        <Eyebrow>{t('projects.eyebrow')}</Eyebrow>
+        <SectionHeading class="max-w-2xl">{t('projects.title')}</SectionHeading>
+        <p class="mt-4 max-w-xl text-navy-600 text-sm leading-relaxed">
+          {lang === 'id'
+            ? 'Peremajaan dan renovasi totem SPBU, penggantian tiang pondasi, hingga pekerjaan pendukung fasilitas.'
+            : 'SPBU totem refurbishment and renovation, foundation pole replacement, and supporting facility works.'} {t('projects.note')}
+        </p>
+      </div>
+      <div class="flex flex-wrap gap-2">
+        {[
+          { id: 'Totem', en: 'Totem' }, { id: 'Signage', en: 'Signage' },
+          { id: 'Renovasi Fasilitas', en: 'Facility Renovation' },
+        ].map((c) => (
+          <span class="text-[11px] font-bold uppercase tracking-wider text-navy-600 border border-navy-200 rounded-full px-3 py-1.5 bg-white">{c[lang]}</span>
+        ))}
+      </div>
+    </div>
+
+    <div data-reveal="stagger" class="mt-10 grid grid-cols-2 lg:grid-cols-4 gap-3">
+      <figure class="lg:col-span-2 lg:row-span-2 relative overflow-hidden rounded-sm group bg-navy-100">
+        <Image src={projMain} alt={lang === 'id' ? 'Peremajaan totem SPBU' : 'SPBU totem refurbishment'}
+               widths={[420, 840]} sizes="(min-width: 1024px) 50vw, 100vw" loading="lazy"
+               class="h-full w-full object-cover aspect-[4/3] lg:aspect-auto lg:h-full transition-transform duration-500 group-hover:scale-105" />
+        <figcaption class="absolute inset-x-0 bottom-0 p-5 pt-14" style="background:linear-gradient(to top, rgba(16,38,66,.94), rgba(16,38,66,.74) 55%, transparent)">
+          <span class="text-[10px] uppercase tracking-[0.14em] text-gold-400 font-bold">Totem Renovation</span>
+          <p class="text-white font-semibold text-sm mt-1">
+            {lang === 'id' ? 'Peremajaan totem & penggantian tiang pondasi' : 'Totem refurbishment & foundation pole replacement'}
+          </p>
+        </figcaption>
+      </figure>
+      {projectGallery.map((im) => (
+        <figure class="relative overflow-hidden rounded-sm group bg-navy-100">
+          <Image src={im.img} alt={im.alt[lang]} widths={[300, 600]} sizes="(min-width: 1024px) 25vw, 50vw" loading="lazy"
+                 class="h-full w-full object-cover aspect-square transition-transform duration-500 group-hover:scale-105" />
+        </figure>
+      ))}
+    </div>
+
+    <h3 class="mt-12 text-sm font-bold uppercase tracking-[0.14em] text-navy-600" data-reveal="up">{t('projects.otherTitle')}</h3>
+    <div data-reveal="stagger" class="mt-5 grid sm:grid-cols-2 lg:grid-cols-4 gap-5">
+      {otherProjects.map((p) => (
+        <div class="border-t-2 border-gold-600 pt-4">
+          <h4 class="text-sm font-semibold text-navy-900">{lang === 'id' ? p.id : p.en}</h4>
+          <p class="mt-2 text-xs text-navy-600 leading-relaxed">{p.desc[lang]}</p>
+        </div>
+      ))}
+    </div>
+  </div>
+</section>
+
+{/* ============ 07 · WHY CHOOSE + PROFILE ============ */}
+<section id="tentang" class="bg-navy-100 border-y border-navy-200">
+  <div class="wrap py-20 md:py-24">
+    <Eyebrow data-reveal="up">{t('why.eyebrow')}</Eyebrow>
+    <SectionHeading class="max-w-3xl" data-reveal="up">{t('why.title')}</SectionHeading>
+
+    <div data-reveal="stagger" class="mt-12 grid sm:grid-cols-2 lg:grid-cols-3 gap-x-10 gap-y-9">
+      {why.map((w) => (
+        <div>
+          <div class="num-light text-xs specline">{w.n}</div>
+          <h3 class="mt-2 font-semibold text-navy-900">{w.title[lang]}</h3>
+          <p class="mt-2 text-sm text-navy-600 leading-relaxed">{w.body[lang]}</p>
+        </div>
+      ))}
+    </div>
+
+    <article data-reveal="up" class="mt-14 bg-white border border-navy-200 rounded-sm p-7 md:p-9">
+      <div class="flex flex-wrap items-center justify-between gap-4">
+        <h3 class="text-lg font-semibold text-navy-900">
+          {lang === 'id' ? 'Tentang' : 'About'} {SITE.legalName}
+        </h3>
+        <span class="text-[10px] uppercase tracking-[0.16em] text-gold-800 font-bold border border-gold-600/40 rounded-sm px-2.5 py-1">{t('profile.badge')}</span>
+      </div>
+      <div class="mt-6 space-y-4 text-[15px] text-navy-600 leading-[1.8] max-w-3xl">
+        <p>
+          {lang === 'id' ? (
+            <><strong class="text-navy-900 font-semibold">{SITE.legalName}</strong> adalah perusahaan yang bergerak dalam penyediaan produk, peralatan, dan layanan untuk mendukung kebutuhan operasional serta pengembangan fasilitas di berbagai sektor industri di Indonesia — dengan pengalaman yang kuat pada fasilitas <strong class="text-navy-900 font-semibold">SPBU dan proyek terkait energi</strong>.</>
+          ) : (
+            <><strong class="text-navy-900 font-semibold">{SITE.legalName}</strong> supplies products, equipment and services supporting the operational needs and facility development of industrial sectors across Indonesia — with strong experience in <strong class="text-navy-900 font-semibold">SPBU facilities and energy-related projects</strong>.</>
+          )}
+        </p>
+        <p>
+          {lang === 'id'
+            ? 'Kami melayani kebutuhan customer mulai dari renovasi dan peremajaan SPBU, renovasi totem dan signage, penyediaan sparepart serta equipment, pekerjaan maintenance, hingga perlengkapan operasional. Tidak berhenti pada penyediaan produk, kami juga menangani pekerjaan berbasis proyek dengan ruang lingkup yang disesuaikan dengan kebutuhan masing-masing customer.'
+            : 'We serve client needs ranging from SPBU renovation and refurbishment, totem and signage renewal, spare parts and equipment supply, maintenance works, through to operational supplies. Beyond product supply, we also take on project-based works with a scope tailored to each client.'}
+        </p>
+        <p>
+          {lang === 'id' ? (
+            <>Segmen customer kami mencakup <strong class="text-navy-900 font-semibold">B2B maupun individu</strong> — perusahaan, pengelola SPBU, serta pihak lain yang memiliki kebutuhan terkait fasilitas dan operasional. Sebagai perusahaan yang terus berkembang, kami membangun basis pelanggan, memperluas jangkauan pasar, dan mengembangkan layanan agar dapat menjangkau lebih banyak customer di Indonesia.</>
+          ) : (
+            <>Our clients span <strong class="text-navy-900 font-semibold">B2B and individual</strong> segments — companies, SPBU operators, and others with facility and operational needs. As a growing company we continue to build our client base, widen market reach and develop our services to serve more customers across Indonesia.</>
+          )}
+        </p>
+      </div>
+      <div class="mt-8 pt-7 border-t border-navy-200 grid sm:grid-cols-3 gap-7">
+        {[
+          { h: { id: 'Fokus Kami', en: 'Our Focus' }, p: { id: 'Produk, layanan, dan solusi proyek untuk operasional, maintenance, dan pengembangan fasilitas customer.', en: 'Products, services and project solutions for client operations, maintenance and facility development.' } },
+          { h: { id: 'Cara Kami Bekerja', en: 'How We Work' }, p: { id: 'Responsif, profesional, dan menyesuaikan solusi dengan spesifikasi serta kondisi proyek customer.', en: 'Responsive and professional, tailoring solutions to the specification and site conditions.' } },
+          { h: { id: 'Legalitas', en: 'Legal Standing' }, p: { id: `${SITE.entityType} berstatus ${SITE.investmentStatus}, terdaftar resmi pada ${SITE.foundedLabel.id}.`, en: `A ${SITE.investmentStatus} limited liability company (PT), officially registered on ${SITE.foundedLabel.en}.` } },
+        ].map((c) => (
+          <div>
+            <p class="text-[10px] uppercase tracking-[0.14em] text-gold-800 font-bold">{c.h[lang]}</p>
+            <p class="mt-2 text-sm text-navy-600 leading-relaxed">{c.p[lang]}</p>
+          </div>
+        ))}
+      </div>
+    </article>
+  </div>
+</section>
+
+{/* ============ 08 · TESTIMONIALS (dark, marquee) ============ */}
+<HomeTestimonials lang={lang} />
+
+{/* ============ 09 · ARTICLES (marquee) ============ */}
+<HomeArticles lang={lang} />
+
+{/* ============ 10 · CONTACT ============ */}
+<section id="kontak" class="bg-navy-100 relative overflow-hidden">
+  <div class="absolute inset-0 grid-tex-ink opacity-50"></div>
+  <div class="absolute -top-24 -right-24 h-96 w-96 rounded-full bg-gold-400/20 blur-3xl"></div>
+  <div class="wrap relative py-20 md:py-24 grid lg:grid-cols-2 gap-14">
+    <div data-reveal="left">
+      <Eyebrow tone="steel">{t('contact.eyebrow')}</Eyebrow>
+      <SectionHeading color="text-white">{t('contact.title')}</SectionHeading>
+      <p class="mt-5 text-steel-100 leading-relaxed max-w-lg">
+        {lang === 'id'
+          ? 'Sampaikan kebutuhan produk, layanan, atau ruang lingkup proyek Anda — tim kami akan membantu menyesuaikan solusi, spesifikasi, dan penawaran harga.'
+          : 'Tell us your product, service or project scope — our team will help align the solution, specification and pricing.'}
+      </p>
+      <div class="mt-9 space-y-4">
+        <a href={`tel:${SITE.phoneIntl}`} class="flex items-start gap-4 group">
+          <span class="shrink-0 grid h-10 w-10 place-items-center rounded-sm bg-white/10 border border-white/25 text-gold-400">
+            <Icon name="phone" size={17} />
+          </span>
+          <span>
+            <span class="block text-[10px] uppercase tracking-[0.14em] text-steel-100 font-bold">{t('contact.phone')}</span>
+            <span class="block text-white font-semibold specline group-hover:text-gold-400 transition-colors">{SITE.phoneDisplay}</span>
+          </span>
+        </a>
+        <a href={`mailto:${SITE.email}`} class="flex items-start gap-4 group">
+          <span class="shrink-0 grid h-10 w-10 place-items-center rounded-sm bg-white/10 border border-white/25 text-gold-400">
+            <Icon name="mail" size={17} />
+          </span>
+          <span>
+            <span class="block text-[10px] uppercase tracking-[0.14em] text-steel-100 font-bold">{t('contact.email')}</span>
+            <span class="block text-white font-semibold group-hover:text-gold-400 transition-colors break-all">{SITE.email}</span>
+          </span>
+        </a>
+        <div class="flex items-start gap-4">
+          <span class="shrink-0 grid h-10 w-10 place-items-center rounded-sm bg-white/10 border border-white/25 text-gold-400">
+            <Icon name="pin" size={17} />
+          </span>
+          <span>
+            <span class="block text-[10px] uppercase tracking-[0.14em] text-steel-100 font-bold">{t('contact.office')}</span>
+            <span class="block text-steel-100 text-sm leading-relaxed">{SITE.address[lang]}</span>
+          </span>
+        </div>
+      </div>
+    </div>
+
+    <div data-reveal="right" style="--rv-delay:120ms" class="bg-white border border-navy-200 rounded-sm p-7 shadow-sm">
+      <h3 class="text-navy-900 font-semibold">{t('form.title')}</h3>
+      <p class="mt-2 text-xs text-navy-500">{t('form.helper')}</p>
+      <form class="mt-6 space-y-4" data-rfq
+            data-invalid={t('form.invalidEmail')}
+            action={`mailto:${SITE.email}`} method="post" enctype="text/plain">
+        <div class="grid sm:grid-cols-2 gap-4">
+          <label class="block">
+            <span class="block text-[11px] uppercase tracking-wider text-navy-600 font-bold mb-1.5">{t('form.name')}</span>
+            <input name="name" type="text" required placeholder={t('form.namePh')}
+              class="w-full bg-white border border-navy-200 rounded-sm px-3 py-2.5 text-sm text-navy-900 placeholder-navy-400 focus:border-gold-600 focus:outline-none transition-colors" />
+          </label>
+          <label class="block">
+            <span class="block text-[11px] uppercase tracking-wider text-navy-600 font-bold mb-1.5">{t('form.company')}</span>
+            <input name="company" type="text" placeholder={t('form.companyPh')}
+              class="w-full bg-white border border-navy-200 rounded-sm px-3 py-2.5 text-sm text-navy-900 placeholder-navy-400 focus:border-gold-600 focus:outline-none transition-colors" />
+          </label>
+        </div>
+        <div class="grid sm:grid-cols-2 gap-4">
+          <label class="block">
+            <span class="block text-[11px] uppercase tracking-wider text-navy-600 font-bold mb-1.5">{t('form.email')}</span>
+            <input name="email" type="email" required placeholder={t('form.emailPh')}
+              class="w-full bg-white border border-navy-200 rounded-sm px-3 py-2.5 text-sm text-navy-900 placeholder-navy-400 focus:border-gold-600 focus:outline-none transition-colors" />
+          </label>
+          <label class="block">
+            <span class="block text-[11px] uppercase tracking-wider text-navy-600 font-bold mb-1.5">{t('form.phone')}</span>
+            <input name="phone" type="tel" placeholder={t('form.phonePh')}
+              class="w-full bg-white border border-navy-200 rounded-sm px-3 py-2.5 text-sm text-navy-900 placeholder-navy-400 focus:border-gold-600 focus:outline-none transition-colors" />
+          </label>
+        </div>
+        <label class="block">
+          <span class="block text-[11px] uppercase tracking-wider text-navy-600 font-bold mb-1.5">{t('form.need')}</span>
+          <select name="need" class="w-full bg-ink-900 border border-white/15 rounded-sm px-3 py-2.5 text-sm text-white focus:border-gold-500 focus:outline-none transition-colors">
+            <option>{t('form.needProduct')}</option>
+            <option>{t('form.needService')}</option>
+            <option>{t('form.needProject')}</option>
+            <option>{t('form.needOther')}</option>
+          </select>
+        </label>
+        <label class="block">
+          <span class="block text-[11px] uppercase tracking-wider text-navy-600 font-bold mb-1.5">{t('form.detail')}</span>
+          <textarea name="detail" rows="4" placeholder={t('form.detailPh')}
+            class="w-full bg-white border border-navy-200 rounded-sm px-3 py-2.5 text-sm text-navy-900 placeholder-navy-400 focus:border-gold-600 focus:outline-none transition-colors"></textarea>
+        </label>
+        <button type="submit" class="btn btn-gold w-full">
+          {t('form.submit')}
+          <Icon name="arrow-right" size={16} />
+        </button>
+      </form>
+    </div>
+  </div>
+</section>

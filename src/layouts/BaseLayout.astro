@@ -1,0 +1,76 @@
+---
+import { Font } from 'astro:assets';
+import '../styles/global.css';
+import { htmlLang, type Lang } from '../i18n/utils';
+import { SITE } from '../lib/site';
+import Seo from '../components/seo/Seo.astro';
+import Header from '../components/layout/Header.astro';
+import Footer from '../components/layout/Footer.astro';
+import WhatsAppFab from '../components/layout/WhatsAppFab.astro';
+import JsonLd from '../components/seo/JsonLd.astro';
+import { organization } from '../lib/schema';
+
+interface Props {
+  lang: Lang;
+  title: string;
+  description: string;
+  path: string;
+  image?: string;
+  type?: 'website' | 'article';
+  noindex?: boolean;
+  /** Rendered above the Header — reserved for banners */
+  bare?: boolean;
+}
+const { lang, title, description, path, image, type, noindex, bare = false } = Astro.props;
+---
+<!doctype html>
+<html lang={htmlLang(lang)} class="no-js scroll-smooth">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <meta name="generator" content={Astro.generator} />
+    {/* Icons — favicon.ico also covers the implicit browser request that
+        otherwise 404s and fails the Lighthouse console-error audit. */}
+    <link rel="icon" href={`${import.meta.env.BASE_URL}favicon.ico`} sizes="any" />
+    <link rel="icon" type="image/png" sizes="32x32" href={`${import.meta.env.BASE_URL}favicon-32.png`} />
+    <link rel="icon" type="image/png" sizes="16x16" href={`${import.meta.env.BASE_URL}favicon-16.png`} />
+    <link rel="apple-touch-icon" sizes="180x180" href={`${import.meta.env.BASE_URL}apple-touch-icon.png`} />
+    <link rel="manifest" href={`${import.meta.env.BASE_URL}site.webmanifest`} />
+    <Seo lang={lang} title={title} description={description} path={path} image={image} type={type} noindex={noindex} />
+    <Font cssVariable="--font-body" preload />
+    <Font cssVariable="--font-display" />
+    {/* Organization markup on every page — the site's primary entity. */}
+    <JsonLd data={organization(Astro.site, lang)} />
+    <slot name="head" />
+  </head>
+  <body class="antialiased">
+    <a href="#main" class="sr-only focus:not-sr-only focus:absolute focus:left-4 focus:top-4 focus:z-[60] focus:rounded focus:bg-gold-500 focus:px-4 focus:py-2 focus:font-bold focus:text-navy-950">
+      {lang === 'id' ? 'Lompat ke konten utama' : 'Skip to main content'}
+    </a>
+
+    {/* Legal/trust strip */}
+    <div class="bg-white border-b border-navy-200 text-navy-600 text-[11px] tracking-wide">
+      <div class="wrap flex items-center justify-between py-2 gap-4">
+        <span class="hidden sm:inline">{SITE.legalName} &nbsp;·&nbsp; {SITE.investmentStatus} &nbsp;·&nbsp; {lang === 'id' ? 'Terdaftar' : 'Registered'} {SITE.foundedLabel[lang]}</span>
+        <span class="sm:hidden">{SITE.legalName}</span>
+        <span class="flex items-center gap-4">
+          <a href={`mailto:${SITE.email}`} class="hover:text-gold-800 transition-colors hidden md:inline-block py-1.5">{SITE.email}</a>
+          <a href={`tel:${SITE.phoneIntl}`} class="hover:text-gold-800 transition-colors specline inline-block py-1.5">{SITE.phoneDisplay}</a>
+        </span>
+      </div>
+    </div>
+
+    <Header lang={lang} />
+
+    <main id="main">
+      <slot />
+    </main>
+
+    <Footer lang={lang} />
+    <WhatsAppFab lang={lang} />
+
+    <script>
+      import '../scripts/main.ts';
+    </script>
+  </body>
+</html>

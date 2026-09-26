@@ -1,0 +1,395 @@
+@import "tailwindcss";
+
+/* ============================================================
+   DESIGN TOKENS — ported verbatim from the approved prototype
+   (resources/prototype/index.html). The prototype is the source
+   of truth for colour, radius, spacing and interaction.
+   ============================================================ */
+@theme {
+  --font-sans: var(--font-body), ui-sans-serif, system-ui, sans-serif;
+  --font-heading: var(--font-display), ui-sans-serif, system-ui, sans-serif;
+
+  /* Navy — struktur "biru baja" (Steel Blue). Ramp = panel "B" di
+     resources/prototype/palette-compare.html; anchor persis dari sana,
+     anak tangga di antaranya campuran gamma-correct yang dihitung. */
+  --color-navy-950: #102642; /* ink: teks paling gelap, di atas emas */
+  --color-navy-900: #1b3a5c; /* judul & teks utama */
+  --color-navy-800: #234263; /* teks kuat (10.34:1) */
+  --color-navy-700: #2c4b6b; /* nav & border tombol (9.03:1) */
+  --color-navy-600: #3f5f80; /* teks body di latar terang (6.65:1) */
+  --color-navy-500: #4d6985; /* teks sekunder (5.71:1) */
+  --color-navy-400: #617891; /* placeholder di latar terang (4.56:1) */
+  --color-navy-300: #b3c2d0; /* border tombol outline */
+  --color-navy-200: #cfdde9; /* border & hairline */
+  --color-navy-100: #e6edf3; /* latar band terang */
+  --color-navy-50: #f1f5f8;  /* latar tint paling terang */
+
+  /* Steel — permukaan BERWARNA (hero / band CTA / footer). Inilah yang
+     memberi emas sesuatu untuk "dilawan"; lihat README prototype. */
+  --color-steel-800: #1b3a5c; /* footer — 11.63:1 dengan teks putih */
+  --color-steel-700: #2a4a6b; /* hero — 9.17:1 */
+  --color-steel-600: #355c84; /* band CTA/kontak — 6.96:1 */
+  --color-steel-100: #dce8f4; /* teks sekunder di atas steel */
+
+  /* Gold — derived from the logo (#DAC967). Unchanged. */
+  --color-gold-300: #eae1ac;
+  --color-gold-400: #e0d187; /* gold on steel (5.96-7.55:1) */
+  --color-gold-500: #dac967; /* brand gold */
+  --color-gold-600: #bfa84a;
+  --color-gold-700: #8f7a28;
+  --color-gold-800: #6b5c1d; /* gold TEXT on light surfaces (6.62:1) */
+  --color-gold-900: #4a4013;
+
+  /* WhatsApp green. #25D366 (brand) is only 1.98:1 with a white glyph — fails
+     WCAG. #107A6D gives 5.22:1 so text and icon both pass AA. */
+  --color-wa: #107a6d;
+  --color-wa-dark: #0d6b60;
+}
+
+/* ============================================================
+   BASE
+   ============================================================ */
+html {
+  scroll-behavior: smooth;
+  -webkit-text-size-adjust: 100%;
+}
+body {
+  font-family: var(--font-sans);
+  background: #fff;
+  color: var(--color-navy-900);
+}
+h1, h2, h3, h4 {
+  font-family: var(--font-heading);
+  letter-spacing: -0.02em;
+}
+
+@utility wrap {
+  width: 100%;
+  max-width: 80rem;
+  margin-inline: auto;
+  padding-inline: 1.25rem;
+  @media (min-width: 768px) {
+    padding-inline: 2rem;
+  }
+}
+
+/* ============================================================
+   COMPONENTS
+   ============================================================ */
+@layer components {
+  /* Eyebrow: small numbered label above a section heading */
+  .eyebrow {
+    font-size: 0.6875rem;
+    font-weight: 700;
+    letter-spacing: 0.18em;
+    text-transform: uppercase;
+    display: inline-flex;
+    align-items: center;
+    gap: 0.625rem;
+  }
+  .eyebrow::before {
+    content: "";
+    width: 1.75rem;
+    height: 1px;
+    background: currentColor;
+    opacity: 0.55;
+  }
+
+  /* Buttons — CONTRAST RULE: never white text on gold (2.26:1, fails). */
+  .btn {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    gap: 0.5rem;
+    font-weight: 700;
+    font-size: 0.9375rem;
+    line-height: 1;
+    padding: 0.875rem 1.5rem;
+    min-height: 44px;
+    border-radius: 0.25rem;
+    border: 1px solid transparent;
+    cursor: pointer;
+    transition: background-color 0.18s ease, color 0.18s ease,
+      border-color 0.18s ease, transform 0.18s ease;
+  }
+  .btn:active { transform: translateY(1px); }
+  .btn-primary { background: var(--color-gold-500); color: var(--color-navy-950); }
+  .btn-primary:hover { background: var(--color-gold-400); }
+  /* Gold solid button (prototype .btn-gold). Ink on gold = 10.77:1; white on
+     gold would be 2.26:1. Used on the steel hero/CTA bands. */
+  .btn-gold { background: var(--color-gold-500); color: var(--color-navy-950); }
+  .btn-gold:hover { background: var(--color-gold-300); }
+  /* Legacy alias of .btn-gold, kept so any older markup still renders. */
+  .btn-on-dark { background: var(--color-gold-500); color: var(--color-navy-950); }
+  .btn-on-dark:hover { background: var(--color-gold-300); }
+  .btn-outline-ink { border-color: var(--color-navy-700); color: var(--color-navy-900); }
+  .btn-outline-ink:hover { background: var(--color-navy-900); color: #fff; }
+  .btn-outline-light { border-color: rgb(220 232 244 / 0.45); color: #fff; }
+  .btn-outline-light:hover { background: rgb(255 255 255 / 0.12); border-color: rgb(220 232 244 / 0.7); }
+  .btn-sm { padding: 0.5rem 1rem; font-size: 0.8125rem; min-height: 38px; }
+  .btn-wa { background: var(--color-wa); color: #fff; }
+  .btn-wa:hover { background: var(--color-wa-dark); }
+
+  /* Mobile dropdown: <details> must actually hide its panel when closed. */
+  .nav-dd > summary { list-style: none; }
+  .nav-dd > summary::-webkit-details-marker { display: none; }
+  .nav-dd > div { display: none; }
+  .nav-dd[open] > div { display: block; }
+  .nav-dd[open] > div > a { min-height: 44px; display: flex; align-items: center; }
+
+  /* Desktop nav links get a 44px hit area even at small text sizes */
+  header nav a { display: flex; align-items: center; min-height: 44px; }
+
+  /* Cards */
+  .card {
+    background: #fff;
+    border: 1px solid var(--color-navy-200);
+    border-radius: 0.375rem;
+    transition: border-color 0.2s ease, transform 0.2s ease, box-shadow 0.2s ease;
+  }
+  .card:hover {
+    border-color: var(--color-gold-600);
+    transform: translateY(-2px);
+    box-shadow: 0 12px 32px -18px rgb(27 58 92 / 0.35);
+  }
+  /* Was a dark card; the site is light with steel bands now, so it is a white
+     card with a navy hairline (the role the prototype's .card-dark filled). */
+  .card-dark {
+    background: #fff;
+    border: 1px solid var(--color-navy-200);
+    border-radius: 0.375rem;
+  }
+
+  .grid-tex {
+    background-image:
+      linear-gradient(to right, rgb(16 38 66 / 0.05) 1px, transparent 1px),
+      linear-gradient(to bottom, rgb(16 38 66 / 0.05) 1px, transparent 1px);
+    background-size: 64px 64px;
+  }
+  .grid-tex-ink {
+    background-image:
+      linear-gradient(to right, rgb(255 255 255 / 0.07) 1px, transparent 1px),
+      linear-gradient(to bottom, rgb(255 255 255 / 0.07) 1px, transparent 1px);
+    background-size: 64px 64px;
+  }
+  .seam {
+    height: 1px;
+    background: linear-gradient(to right, transparent, var(--color-gold-600), transparent);
+    opacity: 0.45;
+  }
+
+  /* Small gold link used inside cards; keeps a 44px touch target. */
+  .link-gold {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.375rem;
+    min-height: 44px;
+    font-size: 0.75rem;
+    font-weight: 700;
+    letter-spacing: 0.06em;
+    text-transform: uppercase;
+    color: var(--color-gold-800);
+    transition: color 0.18s ease, gap 0.18s ease;
+  }
+  .link-gold:hover { color: var(--color-navy-950); gap: 0.625rem; }
+  .link-gold-dark { color: var(--color-gold-400); }
+  .link-gold-dark:hover { color: var(--color-gold-300); }
+
+  .specline { font-variant-numeric: tabular-nums; }
+  footer ul a, footer p a { display: inline-block; padding-block: 0.375rem; }
+  .num { font-family: var(--font-heading); font-weight: 700; color: var(--color-gold-800); }
+  /* .num inside a steel band: gold-800 is unreadable there, so lighten it. */
+  .num-on-steel { color: var(--color-gold-400); }
+  .num-light { font-family: var(--font-heading); font-weight: 700; color: var(--color-gold-800); }
+}
+
+/* ============================================================
+   SCROLL REVEAL
+   Content is VISIBLE by default; script.js adds .rv-hidden then
+   reveals on intersect, so a JS failure never hides content.
+   ============================================================ */
+[data-reveal] {
+  transition: opacity 0.7s cubic-bezier(0.16, 1, 0.3, 1),
+    transform 0.7s cubic-bezier(0.16, 1, 0.3, 1);
+  transition-delay: var(--rv-delay, 0ms);
+  will-change: opacity, transform;
+}
+html.js [data-reveal].rv-hidden { opacity: 0; }
+html.js [data-reveal="up"].rv-hidden { transform: translateY(26px); }
+html.js [data-reveal="left"].rv-hidden { transform: translateX(-26px); }
+html.js [data-reveal="right"].rv-hidden { transform: translateX(26px); }
+html.js [data-reveal="zoom"].rv-hidden { transform: scale(0.96); }
+[data-reveal].rv-shown { opacity: 1; transform: none; }
+
+html.js [data-reveal] .num,
+html.js [data-reveal] .num-light {
+  transition: transform 0.8s cubic-bezier(0.16, 1, 0.3, 1) 0.12s;
+}
+html.js [data-reveal].rv-hidden .num,
+html.js [data-reveal].rv-hidden .num-light { transform: translateY(12px); }
+
+/* ============================================================
+   MARQUEE — testimonials & articles
+   >3 items  → auto-scroll at >=1024px, manual swipe below that.
+   Track is duplicated once by JS; animation shifts -50%.
+   ============================================================ */
+.marquee { position: relative; overflow: hidden; }
+
+.marquee-track {
+  display: flex;
+  gap: 1.5rem;
+  overflow-x: auto;
+  overflow-y: hidden;
+  padding-block: 0.25rem;
+  scroll-snap-type: x mandatory;
+  scrollbar-width: none;
+  -ms-overflow-style: none;
+  -webkit-overflow-scrolling: touch;
+}
+.marquee-track::-webkit-scrollbar { display: none; }
+
+.marquee-set { display: flex; gap: 1.5rem; flex: none; }
+.marquee-item { flex: none; scroll-snap-align: start; }
+
+.marquee::before,
+.marquee::after {
+  content: "";
+  position: absolute;
+  top: 0;
+  bottom: 0;
+  width: 2.5rem;
+  z-index: 2;
+  pointer-events: none;
+}
+.marquee::before {
+  left: 0;
+  background: linear-gradient(to right, var(--mq-fade, #fff), transparent);
+}
+.marquee::after {
+  right: 0;
+  background: linear-gradient(to left, var(--mq-fade, #fff), transparent);
+}
+#klien .marquee { --mq-fade: var(--color-navy-50); }
+#artikel .marquee { --mq-fade: #fff; }
+
+.mq-dots { display: none; justify-content: center; gap: 0.15rem; margin-top: 1rem; }
+.mq-dots button {
+  width: 26px;
+  height: 44px;
+  padding: 0;
+  border: 0;
+  background: transparent;
+  display: inline-grid;
+  place-items: center;
+  cursor: pointer;
+}
+.mq-dots button::after {
+  content: "";
+  display: block;
+  width: 7px;
+  height: 7px;
+  border-radius: 9999px;
+  background: currentColor;
+  opacity: 0.32;
+  transition: opacity 0.2s ease, width 0.2s ease;
+}
+.mq-dots button[aria-current="true"]::after { opacity: 0.9; width: 18px; }
+
+@media (min-width: 1024px) {
+  .marquee-track {
+    overflow: visible;
+    scroll-snap-type: none;
+    mask-image: linear-gradient(to right, transparent, #000 4rem, #000 calc(100% - 4rem), transparent);
+    -webkit-mask-image: linear-gradient(to right, transparent, #000 4rem, #000 calc(100% - 4rem), transparent);
+  }
+  .marquee::before,
+  .marquee::after { display: none; }
+  html.js .marquee-set[data-animating] {
+    animation: mq-scroll var(--mq-dur, 75s) linear infinite;
+  }
+  .marquee:hover .marquee-set[data-animating],
+  .marquee:focus-within .marquee-set[data-animating] { animation-play-state: paused; }
+}
+
+@keyframes mq-scroll {
+  from { transform: translate3d(0, 0, 0); }
+  to { transform: translate3d(calc(-100% - 1.5rem), 0, 0); }
+}
+
+/* ============================================================
+   REDUCED MOTION — honour the OS setting completely
+   ============================================================ */
+@media (prefers-reduced-motion: reduce) {
+  html { scroll-behavior: auto; }
+  html.js [data-reveal],
+  html.js [data-reveal].rv-hidden,
+  html.js [data-reveal].rv-shown {
+    opacity: 1 !important;
+    transform: none !important;
+    transition: none !important;
+  }
+  .marquee-track,
+  .marquee-set { animation: none !important; }
+  * { transition-duration: 0.01ms !important; animation-duration: 0.01ms !important; }
+}
+
+/* ============================================================
+   ARTICLE PROSE
+   Deliberately hand-written instead of pulling in
+   @tailwindcss/typography: one dependency saved, and the styles
+   match our tokens exactly (gold rules, navy palette).
+   ============================================================ */
+.prose-jtech { color: var(--color-navy-600); }
+.prose-jtech > * + * { margin-top: 1.15em; }
+.prose-jtech h2 {
+  font-family: var(--font-heading);
+  font-size: 1.375rem;
+  font-weight: 600;
+  color: var(--color-navy-900);
+  letter-spacing: -0.02em;
+  margin-top: 2.25em;
+  padding-top: 0.75em;
+  border-top: 1px solid var(--color-navy-200);
+}
+.prose-jtech h3 {
+  font-family: var(--font-heading);
+  font-size: 1.125rem;
+  font-weight: 600;
+  color: var(--color-navy-900);
+  margin-top: 1.75em;
+}
+.prose-jtech p, .prose-jtech li { line-height: 1.8; }
+.prose-jtech strong { color: var(--color-navy-900); font-weight: 600; }
+.prose-jtech a {
+  color: var(--color-gold-800);
+  text-decoration: underline;
+  text-underline-offset: 2px;
+  text-decoration-color: var(--color-navy-200);
+}
+.prose-jtech a:hover { text-decoration-color: var(--color-gold-600); }
+.prose-jtech ul { list-style: none; padding-left: 0; }
+.prose-jtech ul li { position: relative; padding-left: 1.35rem; }
+.prose-jtech ul li::before {
+  content: "";
+  position: absolute;
+  left: 0; top: 0.72em;
+  width: 0.4rem; height: 1px;
+  background: var(--color-gold-600);
+}
+.prose-jtech ol { padding-left: 1.35rem; }
+.prose-jtech ol li { padding-left: 0.35rem; }
+.prose-jtech blockquote {
+  border-left: 2px solid var(--color-gold-600);
+  padding-left: 1.15rem;
+  color: var(--color-navy-900);
+  font-style: italic;
+}
+.prose-jtech code {
+  background: var(--color-navy-100);
+  border: 1px solid var(--color-navy-200);
+  border-radius: 3px;
+  padding: 0.1em 0.35em;
+  font-size: 0.9em;
+  font-variant-numeric: tabular-nums;
+}
+.prose-jtech hr { border: 0; height: 1px; background: var(--color-navy-200); margin-block: 2.5em; }

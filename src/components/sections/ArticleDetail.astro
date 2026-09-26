@@ -1,0 +1,110 @@
+---
+import BaseLayout from '../../layouts/BaseLayout.astro';
+import CtaBanner from './CtaBanner.astro';
+import JsonLd from '../seo/JsonLd.astro';
+import Icon from '../primitives/Icon.astro';
+import { getCollection, render } from 'astro:content';
+import { formatDate } from '../../lib/format';
+import { ARTICLE_CATEGORIES } from '../../data/articleCategories';
+import { article as articleSchema } from '../../lib/schema';
+import { useTranslations, type Lang } from '../../i18n/utils';
+import { route } from '../../i18n/routes';
+
+interface Props { lang: Lang; entry: any }
+const { lang, entry } = Astro.props;
+const data = entry.data;
+const t = useTranslations(lang);
+
+// Render the Markdown body. Astro 7 exposes render() from astro:content
+// rather than as a method on the entry.
+const { Content } = await render(entry);
+
+const others = (await getCollection('articles', ({ data: d }) =>
+  d.lang === lang && !d.draft && d.slug !== data.slug))
+  .sort((a, b) => b.data.publishedAt.getTime() - a.data.publishedAt.getTime())
+  .slice(0, 3);
+
+const jsonLd = articleSchema(
+  {
+    title: data.title,
+    description: data.summary,
+    published: data.publishedAt,
+    author: data.author,
+    url: `/articles/${data.slug}/`,
+  },
+  Astro.site,
+);
+---
+<BaseLayout lang={lang} title={data.title} description={data.summary} path={`/articles/${data.slug}/`} type="article">
+  <JsonLd data={jsonLd} />
+
+  <article class="bg-white">
+    <div class="wrap py-12 md:py-16">
+      <nav class="flex flex-wrap items-center gap-2 text-[11px] text-navy-600 mb-8" aria-label="Breadcrumb">
+        <a href={route(lang, 'home')} class="hover:text-gold-800 transition-colors inline-block py-1.5">{t('common.breadcrumbHome')}</a>
+        <span aria-hidden="true">/</span>
+        <a href={route(lang, 'articles')} class="hover:text-gold-800 transition-colors inline-block py-1.5">{t('pages.articles.eyebrow')}</a>
+        <span aria-hidden="true">/</span>
+        <span class="text-navy-900" aria-current="page">{data.title}</span>
+      </nav>
+
+      <div class="max-w-3xl">
+        <span class="text-[10px] uppercase tracking-[0.16em] text-gold-800 font-bold">
+          {ARTICLE_CATEGORIES[data.category][lang]}
+        </span>
+        <h1 class="mt-4 text-[clamp(1.9rem,4vw,2.75rem)] font-semibold text-navy-900 leading-[1.15]">{data.title}</h1>
+        <p class="mt-5 text-navy-600 text-lg leading-relaxed">{data.summary}</p>
+        <p class="mt-5 text-xs text-navy-600 specline border-t border-navy-200 pt-4">
+          {formatDate(data.publishedAt, lang)}
+          {data.updatedAt && <> · {t('pages.article.updated')} {formatDate(data.updatedAt, lang)}</>}
+          · {data.author}
+        </p>
+      </div>
+
+      <div class="mt-10 max-w-3xl prose-jtech">
+        <Content />
+      </div>
+
+      {data.sources.length > 0 && (
+        <section class="mt-12 max-w-3xl border-t-2 border-gold-600 pt-6" aria-labelledby="sources-heading">
+          <h2 id="sources-heading" class="text-sm font-bold uppercase tracking-[0.14em] text-navy-600">
+            {t('pages.article.sources')}
+          </h2>
+          <ul class="mt-4 space-y-2">
+            {data.sources.map((s: any) => (
+              <li class="flex gap-3 text-sm">
+                <Icon name="link" size={14} class="mt-1 shrink-0 text-gold-800" />
+                <a href={s.url} target="_blank" rel="noopener nofollow"
+                   class="text-navy-600 hover:text-gold-800 transition-colors underline decoration-navy-200 underline-offset-2">
+                  {s.label}
+                </a>
+              </li>
+            ))}
+          </ul>
+        </section>
+      )}
+
+      <a href={route(lang, 'articles')} class="link-gold mt-12">← {t('pages.article.back')}</a>
+    </div>
+  </article>
+
+  {others.length > 0 && (
+    <section class="bg-navy-100 border-t border-navy-200">
+      <div class="wrap py-14">
+        <h2 class="text-lg font-semibold text-navy-900" data-reveal="up">{t('pages.article.other')}</h2>
+        <div class="mt-8 grid sm:grid-cols-2 lg:grid-cols-3 gap-5" data-reveal="stagger">
+          {others.map((o: any) => (
+            <a href={`${route(lang, 'articles')}${o.data.slug}/`} class="card p-5 block">
+              <span class="text-[10px] uppercase tracking-[0.14em] text-gold-800 font-bold">
+                {ARTICLE_CATEGORIES[o.data.category][lang]}
+              </span>
+              <h3 class="mt-2 font-semibold text-navy-900 leading-snug">{o.data.title}</h3>
+            </a>
+          ))}
+        </div>
+      </div>
+    </section>
+  )}
+
+  <CtaBanner lang={lang} />
+</BaseLayout>

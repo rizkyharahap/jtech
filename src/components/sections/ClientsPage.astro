@@ -1,0 +1,107 @@
+---
+import BaseLayout from '../../layouts/BaseLayout.astro';
+import PageHero from '../layout/PageHero.astro';
+import CtaBanner from './CtaBanner.astro';
+import Eyebrow from '../primitives/Eyebrow.astro';
+import SectionHeading from '../primitives/SectionHeading.astro';
+import Icon from '../primitives/Icon.astro';
+import { getCollection } from 'astro:content';
+import { SITE } from '../../lib/site';
+import { useTranslations, type Lang } from '../../i18n/utils';
+
+interface Props { lang: Lang }
+const { lang } = Astro.props;
+const t = useTranslations(lang);
+
+const testimonials = (await getCollection('testimonials', ({ data }) => data.lang === lang))
+  .sort((a, b) => a.data.order - b.data.order);
+
+const segments = [
+  { id: 'SPBU / Retail Fuel', en: 'SPBU / Retail Fuel', count: '31+' },
+  { id: 'Energi & Migas', en: 'Energy & Oil and Gas', count: '' },
+  { id: 'Konstruksi', en: 'Construction', count: '' },
+  { id: 'Manufaktur', en: 'Manufacturing', count: '' },
+  { id: 'Logistik', en: 'Logistics', count: '' },
+];
+---
+<BaseLayout lang={lang} title={t('pages.clients.title')} description={t('pages.clients.desc')} path="/clients/">
+  <PageHero
+    lang={lang}
+    eyebrow={t('pages.clients.eyebrow')} title={t('pages.clients.title')} description={t('pages.clients.desc')} />
+
+  <section class="bg-white">
+    <div class="wrap py-16 md:py-20">
+      <Eyebrow data-reveal="up">{t('pages.clients.segments')}</Eyebrow>
+      <div class="mt-8 grid sm:grid-cols-2 lg:grid-cols-5 gap-px bg-navy-100 border border-navy-200 rounded-sm overflow-hidden" data-reveal="stagger">
+        {segments.map((s) => (
+          <div class="bg-white p-6">
+            <p class="text-sm font-semibold text-navy-900">{s[lang]}</p>
+            {s.count && <p class="num-light text-2xl mt-2 specline">{s.count}</p>}
+          </div>
+        ))}
+      </div>
+      <p class="mt-6 text-xs text-navy-600 max-w-2xl leading-relaxed" data-reveal="up">
+        {lang === 'id'
+          ? 'Untuk customer yang tidak dapat dipublikasikan secara terbuka, informasi ditampilkan berdasarkan tipe customer atau jenis industri tanpa mencantumkan nama perusahaan.'
+          : 'Where clients cannot be named publicly, information is presented by client type or industry rather than by company name.'}
+      </p>
+    </div>
+  </section>
+
+  <section class="bg-navy-50 relative overflow-hidden">
+    <div class="absolute inset-0 grid-tex opacity-40"></div>
+    <div class="wrap relative py-16 md:py-20">
+      <Eyebrow data-reveal="up">{t('testimonials.eyebrow')}</Eyebrow>
+      <SectionHeading class="max-w-2xl" data-reveal="up">{t('pages.clients.testimonials')}</SectionHeading>
+      <div class="mt-10 grid md:grid-cols-2 xl:grid-cols-3 gap-6" data-reveal="stagger">
+        {testimonials.map((item) => (
+          <blockquote class="card-dark p-7 flex flex-col">
+            <Icon name="quote" size={26} class="text-gold-600 shrink-0" />
+            <p class="mt-5 text-navy-600 leading-relaxed text-[15px] flex-1">&ldquo;{item.data.quote}&rdquo;</p>
+            <footer class="mt-6 pt-5 border-t border-navy-200">
+              <p class="text-sm font-semibold text-navy-900">{item.data.attribution}</p>
+              <p class="text-xs text-navy-500 mt-0.5">{item.data.sector}</p>
+            </footer>
+          </blockquote>
+        ))}
+      </div>
+    </div>
+  </section>
+
+  <section class="bg-navy-100 border-y border-navy-200">
+    <div class="wrap py-16 md:py-20">
+      <Eyebrow data-reveal="up">{t('pages.about.legal')}</Eyebrow>
+      <SectionHeading class="max-w-2xl" data-reveal="up">{t('pages.clients.credentials')}</SectionHeading>
+      <dl class="mt-10 grid grid-cols-2 lg:grid-cols-4 gap-6" data-reveal="stagger">
+        <div>
+          <dt class="text-[10px] uppercase tracking-[0.14em] text-navy-600 font-bold">{t('pages.about.entity')}</dt>
+          <dd class="mt-1.5 text-sm font-semibold text-navy-900">{SITE.entityType}</dd>
+        </div>
+        <div>
+          <dt class="text-[10px] uppercase tracking-[0.14em] text-navy-600 font-bold">{t('pages.about.investment')}</dt>
+          <dd class="mt-1.5 text-sm font-semibold text-navy-900">{SITE.investmentStatus}</dd>
+        </div>
+        <div>
+          <dt class="text-[10px] uppercase tracking-[0.14em] text-navy-600 font-bold">{t('pages.about.scale')}</dt>
+          <dd class="mt-1.5 text-sm font-semibold text-navy-900">{SITE.businessScale[lang]}</dd>
+        </div>
+        <div>
+          <dt class="text-[10px] uppercase tracking-[0.14em] text-navy-600 font-bold">{t('pages.about.founded')}</dt>
+          <dd class="mt-1.5 text-sm font-semibold text-navy-900 specline">{SITE.foundedLabel[lang]}</dd>
+        </div>
+      </dl>
+      <div class="mt-8 pt-7 border-t border-navy-200">
+        <p class="text-[10px] uppercase tracking-[0.14em] text-navy-600 font-bold">{t('pages.about.kbli')}</p>
+        <div class="mt-3 flex flex-wrap gap-2">
+          {SITE.kbli.map((k) => (
+            <span class="text-[11px] text-navy-700 bg-white border border-navy-200 rounded-sm px-2.5 py-1">
+              <span class="specline font-semibold">{k.code}</span> — {k.label[lang]}
+            </span>
+          ))}
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <CtaBanner lang={lang} />
+</BaseLayout>

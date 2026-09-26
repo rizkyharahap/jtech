@@ -1,0 +1,46 @@
+---
+import { type Lang, useTranslations } from '../../i18n/utils';
+import { route } from '../../i18n/routes';
+import Eyebrow from '../primitives/Eyebrow.astro';
+
+interface Props {
+  lang: Lang;
+  eyebrow: string;
+  title: string;
+  description?: string;
+  /** Optional wide banner image (already imported ImageMetadata). */
+  image?: ImageMetadata;
+  imageAlt?: string;
+  eyebrowReveal?: string;
+}
+const { lang, eyebrow, title, description, image, imageAlt = '' } = Astro.props;
+const t = useTranslations(lang);
+---
+<section class="relative bg-steel-700 overflow-hidden">
+  {image && (
+    <img src={image.src} alt={imageAlt} aria-hidden="true"
+         class="absolute inset-0 h-full w-full object-cover opacity-[0.30]" />
+  )}
+  <div class="absolute inset-0" style="background:linear-gradient(to bottom right, rgba(27,58,92,.86), rgba(42,74,107,.72) 45%, rgba(53,92,132,.78))"></div>
+  <div class="absolute inset-0 grid-tex-ink opacity-70"></div>
+  <div class="absolute left-0 top-0 h-full w-px bg-gradient-to-b from-transparent via-gold-500/70 to-transparent"></div>
+
+  <div class="wrap relative py-14 md:py-20">
+    <div class="flex flex-wrap items-center gap-2 text-[11px] text-steel-100 mb-6">
+      <a href={route(lang, 'home')} class="hover:text-gold-400 transition-colors inline-block py-1.5">{t('common.breadcrumbHome')}</a>
+      <span aria-hidden="true">/</span>
+      <span class="text-white" aria-current="page">{eyebrow}</span>
+    </div>
+    <Eyebrow tone="steel">{eyebrow}</Eyebrow>
+    <h1 data-reveal="up" style="--rv-delay:80ms"
+        class="mt-5 max-w-4xl text-white font-semibold leading-[1.1] text-[clamp(2rem,4.6vw,3.5rem)]">
+      {title}
+    </h1>
+    {description && (
+      <p data-reveal="up" style="--rv-delay:160ms" class="mt-5 max-w-2xl text-steel-100 leading-relaxed">
+        {description}
+      </p>
+    )}
+    <slot />
+  </div>
+</section>

@@ -1,0 +1,48 @@
+---
+import { absoluteUrl, localePath, type Lang } from '../../lib/url';
+import { SITE } from '../../lib/site';
+
+interface Props {
+  lang: Lang;
+  title: string;
+  description: string;
+  /** Path without locale prefix, e.g. '/products/' */
+  path: string;
+  image?: string;
+  type?: 'website' | 'article';
+  noindex?: boolean;
+}
+const { lang, title, description, path, image, type = 'website', noindex = false } = Astro.props;
+
+const site = Astro.site;
+const canonical = absoluteUrl(localePath(lang, path), site);
+const ogImage = absoluteUrl(image ?? '/og/og-default.jpg', site);
+const titleFull = `${title} | ${SITE.legalName}`;
+
+// hreflang alternates for both locales + x-default
+const alt = (l: Lang) => absoluteUrl(localePath(l, path), site);
+---
+<title>{titleFull}</title>
+<meta name="description" content={description} />
+<link rel="canonical" href={canonical} />
+{noindex && <meta name="robots" content="noindex,nofollow" />}
+
+<link rel="alternate" hreflang="id-ID" href={alt('id')} />
+<link rel="alternate" hreflang="en-US" href={alt('en')} />
+<link rel="alternate" hreflang="x-default" href={alt('id')} />
+
+<meta property="og:type" content={type} />
+<meta property="og:site_name" content={SITE.legalName} />
+<meta property="og:locale" content={lang === 'id' ? 'id_ID' : 'en_US'} />
+<meta property="og:title" content={titleFull} />
+<meta property="og:description" content={description} />
+<meta property="og:url" content={canonical} />
+<meta property="og:image" content={ogImage} />
+<meta property="og:image:width" content="1200" />
+<meta property="og:image:height" content="630" />
+
+<meta name="twitter:card" content="summary_large_image" />
+<meta name="twitter:title" content={titleFull} />
+<meta name="twitter:description" content={description} />
+<meta name="twitter:image" content={ogImage} />
+<meta name="theme-color" content="#102642" />

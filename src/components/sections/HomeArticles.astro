@@ -1,0 +1,76 @@
+---
+/** Educational articles — marquee (>3 items) on desktop, swipe carousel on mobile. */
+import { getCollection } from 'astro:content';
+import type { Lang } from '../../i18n/utils';
+import { useTranslations } from '../../i18n/utils';
+import { route } from '../../i18n/routes';
+import { formatDate } from '../../lib/format';
+import Eyebrow from '../primitives/Eyebrow.astro';
+import SectionHeading from '../primitives/SectionHeading.astro';
+import Icon from '../primitives/Icon.astro';
+
+interface Props { lang: Lang }
+const { lang } = Astro.props;
+const t = useTranslations(lang);
+
+const articles = (await getCollection('articles', ({ data }) => data.lang === lang && !data.draft))
+  .sort((a, b) => b.data.publishedAt.getTime() - a.data.publishedAt.getTime());
+
+const categoryLabels: Record<string, { id: string; en: string }> = {
+  'product-knowledge': { id: 'Product Knowledge', en: 'Product Knowledge' },
+  'spbu-equipment-components': { id: 'Equipment & Komponen', en: 'Equipment & Components' },
+  'maintenance-facility': { id: 'Maintenance', en: 'Maintenance' },
+  'spbu-safety-compliance': { id: 'Safety & Compliance', en: 'Safety & Compliance' },
+  'product-selection-tips': { id: 'Tips Pemilihan', en: 'Selection Tips' },
+  'renovation-facility': { id: 'Renovasi & Fasilitas', en: 'Renovation & Facility' },
+  'industry-regulatory-update': { id: 'Update Regulasi', en: 'Regulatory Update' },
+  'project-insight': { id: 'Project Insight', en: 'Project Insight' },
+  'company-product-update': { id: 'Update Perusahaan', en: 'Company & Product Update' },
+};
+---
+
+<section id="artikel" class="bg-white">
+  <div class="wrap py-20 md:py-24">
+    <div class="flex flex-wrap items-end justify-between gap-6">
+      <div data-reveal="up">
+        <Eyebrow>{t('articles.eyebrow')}</Eyebrow>
+        <SectionHeading class="max-w-2xl">{t('articles.title')}</SectionHeading>
+      </div>
+      <a href={route(lang, 'articles')} class="btn btn-outline-ink btn-sm">{t('articles.all')}</a>
+    </div>
+
+    <div class="marquee mt-10" data-marquee data-mq-dur="85s"
+         data-mq-prev={t('testimonials.prev')} data-mq-next={t('testimonials.next')} data-mq-goto={t('testimonials.goto')}>
+      <div class="marquee-track" data-marquee-track>
+        <div class="marquee-set" data-marquee-set>
+          {articles.map((a) => (
+            <div class="marquee-item w-[280px] sm:w-[320px] lg:w-[340px]">
+              <article class="card p-6 flex flex-col h-full">
+                <span class="text-[10px] uppercase tracking-[0.14em] text-gold-800 font-bold">
+                  {categoryLabels[a.data.category]?.[lang]}
+                </span>
+                <h3 class="mt-3 font-semibold text-navy-900 leading-snug">
+                  <a href={`${route(lang, 'articles')}${a.data.slug}/`} class="hover:text-gold-800 transition-colors">
+                    {a.data.title}
+                  </a>
+                </h3>
+                <p class="mt-3 text-sm text-navy-600 leading-relaxed flex-1">{a.data.summary}</p>
+                {a.data.sources.length > 0 ? (
+                  <p class="mt-5 pt-4 border-t border-navy-200 text-[11px] text-navy-600 specline inline-flex items-center gap-1.5">
+                    <Icon name="link" size={12} class="shrink-0" />
+                    {a.data.sources.length} {t('articles.sources')}
+                  </p>
+                ) : (
+                  <p class="mt-5 pt-4 border-t border-navy-200 text-[11px] text-navy-600 specline">
+                    {formatDate(a.data.publishedAt, lang)}
+                  </p>
+                )}
+              </article>
+            </div>
+          ))}
+        </div>
+      </div>
+      <div class="mq-dots text-navy-600" role="group" aria-label={t('carousel.label')}></div>
+    </div>
+  </div>
+</section>

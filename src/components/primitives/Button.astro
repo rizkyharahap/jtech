@@ -1,0 +1,29 @@
+---
+interface Props {
+  href?: string;
+  variant?: 'primary' | 'gold' | 'outline-ink' | 'outline-light' | 'on-dark' | 'wa';
+  size?: 'md' | 'sm';
+  type?: 'button' | 'submit';
+  class?: string;
+  external?: boolean;
+}
+const {
+  href, variant = 'primary', size = 'md', type = 'button',
+  class: cls = '', external = false,
+} = Astro.props;
+const variants = {
+  primary: 'btn-primary',
+  gold: 'btn-gold',
+  'outline-ink': 'btn-outline-ink',
+  'outline-light': 'btn-outline-light',
+  'on-dark': 'btn-on-dark',
+  wa: 'btn-wa',
+};
+const classes = ['btn', variants[variant], size === 'sm' ? 'btn-sm' : '', cls];
+const attrs = external ? { target: '_blank', rel: 'noopener' } : {};
+---
+{href ? (
+  <a href={href} class:list={classes} {...attrs}><slot /></a>
+) : (
+  <button type={type} class:list={classes}><slot /></button>
+)}

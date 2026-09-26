@@ -1,0 +1,44 @@
+---
+import { type Lang, useTranslations } from '../../i18n/utils';
+import { route } from '../../i18n/routes';
+import { SITE, waLink } from '../../lib/site';
+import Eyebrow from '../primitives/Eyebrow.astro';
+import SectionHeading from '../primitives/SectionHeading.astro';
+import Button from '../primitives/Button.astro';
+import Icon from '../primitives/Icon.astro';
+
+interface Props { lang: Lang; title?: string }
+const { lang, title } = Astro.props;
+const t = useTranslations(lang);
+const heading = title ?? t('contact.title');
+---
+<section class="bg-navy-100 relative overflow-hidden">
+  <div class="absolute inset-0 grid-tex-ink opacity-50"></div>
+  <div class="absolute -top-20 -right-20 h-72 w-72 rounded-full bg-gold-400/20 blur-3xl"></div>
+  <div class="wrap relative py-16 md:py-20" data-reveal="up">
+    <div class="max-w-3xl">
+      <Eyebrow tone="steel">{t('contact.eyebrow')}</Eyebrow>
+      <SectionHeading color="text-white">{heading}</SectionHeading>
+      <p class="mt-5 text-steel-100 leading-relaxed">
+        {lang === 'id'
+          ? 'Sampaikan kebutuhan produk, layanan, atau ruang lingkup proyek Anda — tim kami akan membantu menyesuaikan solusi, spesifikasi, dan penawaran harga.'
+          : 'Tell us your product, service or project scope — our team will help align the solution, specification and pricing.'}
+      </p>
+      <div class="mt-8 flex flex-wrap gap-3">
+        <Button href={route(lang, 'contact')} variant="gold">
+          {t('hero.ctaPrimary')}
+          <Icon name="arrow-right" size={16} />
+        </Button>
+        <Button href={waLink()} variant="outline-light" external>
+          <Icon name="whatsapp" size={16} />
+          WhatsApp
+        </Button>
+      </div>
+      <p class="mt-5 flex flex-wrap items-center gap-x-3 gap-y-1 text-sm text-steel-100">
+        <a href={`tel:${SITE.phoneIntl}`} class="specline hover:text-gold-400 transition-colors">{SITE.phoneDisplay}</a>
+        <span aria-hidden="true" class="h-1 w-1 rounded-full bg-gold-600/60"></span>
+        <a href={`mailto:${SITE.email}`} class="hover:text-gold-400 transition-colors break-all">{SITE.email}</a>
+      </p>
+    </div>
+  </div>
+</section>

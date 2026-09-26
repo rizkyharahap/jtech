@@ -1,0 +1,73 @@
+---
+import BaseLayout from '../../layouts/BaseLayout.astro';
+import PageHero from '../layout/PageHero.astro';
+import RfqForm from '../forms/RfqForm.astro';
+import Icon from '../primitives/Icon.astro';
+import { SITE } from '../../lib/site';
+import { useTranslations, type Lang } from '../../i18n/utils';
+
+interface Props { lang: Lang }
+const { lang } = Astro.props;
+const t = useTranslations(lang);
+const rows = [
+  { icon: 'phone', label: t('contact.phone'), value: SITE.phoneDisplay, href: `tel:${SITE.phoneIntl}` },
+  { icon: 'mail', label: t('contact.email'), value: SITE.email, href: `mailto:${SITE.email}` },
+  { icon: 'pin', label: t('contact.office'), value: SITE.address[lang] },
+] as const;
+---
+<BaseLayout lang={lang} title={t('pages.contact.title')} description={t('pages.contact.desc')} path="/contact/">
+  <PageHero
+    lang={lang}
+    eyebrow={t('pages.contact.eyebrow')} title={t('pages.contact.title')} description={t('pages.contact.desc')} />
+
+  <section class="bg-white">
+    <div class="wrap py-16 md:py-20 grid lg:grid-cols-2 gap-12">
+      <div data-reveal="left">
+        <h2 class="text-lg font-semibold text-navy-900">{t('pages.contact.title')}</h2>
+        <div class="mt-6 space-y-5">
+          {rows.map((r) => (
+            <div class="flex items-start gap-4">
+              <span class="shrink-0 grid h-10 w-10 place-items-center rounded-sm bg-gold-500/10 border border-gold-600/30 text-gold-800">
+                <Icon name={r.icon as any} size={17} />
+              </span>
+              <span>
+                <span class="block text-[10px] uppercase tracking-[0.14em] text-navy-600 font-bold">{r.label}</span>
+                {r.href ? (
+                  <a href={r.href} class="block text-navy-900 font-semibold hover:text-gold-800 transition-colors break-all">{r.value}</a>
+                ) : (
+                  <span class="block text-navy-900 text-sm leading-relaxed">{r.value}</span>
+                )}
+              </span>
+            </div>
+          ))}
+        </div>
+
+        <div class="mt-10 border-t border-navy-200 pt-8">
+          <h3 class="text-sm font-bold uppercase tracking-[0.14em] text-navy-600">{t('pages.about.legal')}</h3>
+          <dl class="mt-4 grid sm:grid-cols-2 gap-x-8 gap-y-4">
+            <div>
+              <dt class="text-[10px] uppercase tracking-[0.14em] text-navy-600 font-bold">{t('pages.about.entity')}</dt>
+              <dd class="mt-1 text-sm text-navy-900">{SITE.entityType}</dd>
+            </div>
+            <div>
+              <dt class="text-[10px] uppercase tracking-[0.14em] text-navy-600 font-bold">{t('pages.about.investment')}</dt>
+              <dd class="mt-1 text-sm text-navy-900">{SITE.investmentStatus}</dd>
+            </div>
+            <div>
+              <dt class="text-[10px] uppercase tracking-[0.14em] text-navy-600 font-bold">{t('pages.about.founded')}</dt>
+              <dd class="mt-1 text-sm text-navy-900 specline">{SITE.foundedLabel[lang]}</dd>
+            </div>
+            <div>
+              <dt class="text-[10px] uppercase tracking-[0.14em] text-navy-600 font-bold">{t('pages.about.scale')}</dt>
+              <dd class="mt-1 text-sm text-navy-900">{SITE.businessScale[lang]}</dd>
+            </div>
+          </dl>
+        </div>
+      </div>
+
+      <div>
+        <RfqForm lang={lang} />
+      </div>
+    </div>
+  </section>
+</BaseLayout>
