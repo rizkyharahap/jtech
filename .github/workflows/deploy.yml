@@ -27,12 +27,10 @@ jobs:
           path: .
           package-manager: pnpm@latest
           node-version: 24.21.0
+          out-dir: dist
         env:
           SITE_URL: https://rizkyharahap.github.io
           BASE_PATH: /jtech
-
-      - name: Upload artifact
-        uses: actions/upload-pages-artifact@v3
 
   deploy:
     needs: build
