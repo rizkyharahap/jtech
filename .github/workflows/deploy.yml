@@ -26,6 +26,7 @@ jobs:
         with:
           path: .
           package-manager: pnpm@latest
+          node-version: 24.21.0
         env:
           SITE_URL: https://rizkyharahap.github.io
           BASE_PATH: /jtech
