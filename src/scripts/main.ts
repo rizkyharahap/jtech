@@ -199,26 +199,3 @@ if (chips.length && productCards.length) {
   });
 }
 
-/* --------------------------------------------------- WhatsApp floating FAB */
-const waBtn = document.getElementById('wa-btn');
-const waPop = document.getElementById('wa-pop');
-if (waBtn && waPop) {
-  const waIcon = document.getElementById('wa-icon');
-  const ICON_WA = waIcon?.innerHTML ?? '';
-  const ICON_X =
-    '<path d="M18 6 6 18M6 6l12 12" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" fill="none"/>';
-  const setWa = (open: boolean) => {
-    waPop.classList.toggle('hidden', !open);
-    if (waIcon) waIcon.innerHTML = open ? ICON_X : ICON_WA;
-    waBtn.setAttribute('aria-expanded', String(open));
-    waBtn.setAttribute('aria-label', waBtn.dataset.labelClose ?? 'Close');
-  };
-  waBtn.addEventListener('click', () => setWa(waPop.classList.contains('hidden')));
-  document.addEventListener('keydown', (e) => {
-    if (e.key === 'Escape') setWa(false);
-  });
-  document.addEventListener('click', (e) => {
-    const t = e.target as Node;
-    if (!document.getElementById('wa-fab')?.contains(t)) setWa(false);
-  });
-}

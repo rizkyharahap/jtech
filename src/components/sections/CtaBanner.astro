@@ -12,7 +12,7 @@ const { lang, title } = Astro.props;
 const t = useTranslations(lang);
 const heading = title ?? t('contact.title');
 ---
-<section class="bg-navy-100 relative overflow-hidden">
+<section class="bg-steel-600 relative overflow-hidden">
   <div class="absolute inset-0 grid-tex-ink opacity-50"></div>
   <div class="absolute -top-20 -right-20 h-72 w-72 rounded-full bg-gold-400/20 blur-3xl"></div>
   <div class="wrap relative py-16 md:py-20" data-reveal="up">
@@ -35,9 +35,9 @@ const heading = title ?? t('contact.title');
         </Button>
       </div>
       <p class="mt-5 flex flex-wrap items-center gap-x-3 gap-y-1 text-sm text-steel-100">
-        <a href={`tel:${SITE.phoneIntl}`} class="specline hover:text-gold-400 transition-colors">{SITE.phoneDisplay}</a>
+        <a href={`tel:${SITE.phoneIntl}`} class="specline hover:text-gold-300 transition-colors">{SITE.phoneDisplay}</a>
         <span aria-hidden="true" class="h-1 w-1 rounded-full bg-gold-600/60"></span>
-        <a href={`mailto:${SITE.email}`} class="hover:text-gold-400 transition-colors break-all">{SITE.email}</a>
+        <a href={`mailto:${SITE.email}`} class="hover:text-gold-300 transition-colors break-all">{SITE.email}</a>
       </p>
     </div>
   </div>

@@ -3,6 +3,6 @@ import type { Lang } from '../../i18n/utils';
 interface Props { tone?: 'light' | 'dark' | 'steel'; class?: string }
 const { tone = 'light', class: cls = '' } = Astro.props;
 /** light = on white/navy tint -> gold-800; steel = on a steel band -> gold-400 */
-const color = tone === 'steel' ? 'text-gold-400' : tone === 'dark' ? 'text-gold-500' : 'text-gold-800';
+const color = tone === 'steel' ? 'text-gold-300' : tone === 'dark' ? 'text-gold-600' : 'text-gold-800';
 ---
 <span class:list={['eyebrow', color, cls]}><slot /></span>

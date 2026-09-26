@@ -21,7 +21,10 @@ const Heading = headingLevel;
 const t = useTranslations(lang);
 
 let products = await getCollection('products', ({ data }) => data.lang === lang && !data.draft);
-products = products.sort((a, b) => a.data.order - b.data.order);
+products = products.sort((a, b) => {
+  if (a.data.featured !== b.data.featured) return a.data.featured ? -1 : 1;
+  return a.data.order - b.data.order;
+});
 if (limit) products = products.slice(0, limit);
 
 /**

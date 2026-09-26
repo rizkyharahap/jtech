@@ -35,34 +35,34 @@ const companyLinks = [
         </p>
       </div>
       <div class="lg:col-span-2">
-        <p class="text-[10px] uppercase tracking-[0.16em] text-gold-400 font-bold">{t('footer.products')}</p>
+        <p class="text-[10px] uppercase tracking-[0.16em] text-gold-300 font-bold">{t('footer.products')}</p>
         <ul class="mt-4 space-y-2 text-sm text-steel-100">
           {productLinks.map((l) => (
-            <li><a href={route(lang, l.key)} class="hover:text-gold-400 transition-colors">{l.label[lang]}</a></li>
+            <li><a href={route(lang, l.key)} class="hover:text-gold-300 transition-colors">{l.label[lang]}</a></li>
           ))}
         </ul>
       </div>
       <div class="lg:col-span-2">
-        <p class="text-[10px] uppercase tracking-[0.16em] text-gold-400 font-bold">{t('footer.services')}</p>
+        <p class="text-[10px] uppercase tracking-[0.16em] text-gold-300 font-bold">{t('footer.services')}</p>
         <ul class="mt-4 space-y-2 text-sm text-steel-100">
           {serviceLinks.map((l) => (
-            <li><a href={route(lang, l.key)} class="hover:text-gold-400 transition-colors">{l.label[lang]}</a></li>
+            <li><a href={route(lang, l.key)} class="hover:text-gold-300 transition-colors">{l.label[lang]}</a></li>
           ))}
         </ul>
       </div>
       <div class="lg:col-span-2">
-        <p class="text-[10px] uppercase tracking-[0.16em] text-gold-400 font-bold">{t('footer.company')}</p>
+        <p class="text-[10px] uppercase tracking-[0.16em] text-gold-300 font-bold">{t('footer.company')}</p>
         <ul class="mt-4 space-y-2 text-sm text-steel-100">
           {companyLinks.map((l) => (
-            <li><a href={route(lang, l.key)} class="hover:text-gold-400 transition-colors">{l.label[lang]}</a></li>
+            <li><a href={route(lang, l.key)} class="hover:text-gold-300 transition-colors">{l.label[lang]}</a></li>
           ))}
         </ul>
       </div>
       <div class="lg:col-span-2">
-        <p class="text-[10px] uppercase tracking-[0.16em] text-gold-400 font-bold">{t('footer.contact')}</p>
+        <p class="text-[10px] uppercase tracking-[0.16em] text-gold-300 font-bold">{t('footer.contact')}</p>
         <ul class="mt-4 space-y-2 text-sm text-steel-100">
-          <li><a href={`tel:${SITE.phoneIntl}`} class="hover:text-gold-400 transition-colors specline">{SITE.phoneDisplay}</a></li>
-          <li><a href={`mailto:${SITE.email}`} class="hover:text-gold-400 transition-colors break-all">{SITE.email}</a></li>
+          <li><a href={`tel:${SITE.phoneIntl}`} class="hover:text-gold-300 transition-colors specline">{SITE.phoneDisplay}</a></li>
+          <li><a href={`mailto:${SITE.email}`} class="hover:text-gold-300 transition-colors break-all">{SITE.email}</a></li>
           <li class="leading-relaxed">{SITE.addressShort[lang]}<br />West Java 16360</li>
         </ul>
       </div>

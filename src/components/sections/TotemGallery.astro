@@ -1,0 +1,44 @@
+---
+import { Image } from 'astro:assets';
+import type { Lang } from '../../i18n/utils';
+import { resolveTotemImages } from '../../lib/totemGallery';
+
+interface Props {
+  lang: Lang;
+  /** Show the large featured tile (home page). */
+  featured?: boolean;
+}
+
+const { lang, featured = true } = Astro.props;
+
+const images = import.meta.glob<{ default: ImageMetadata }>('../../assets/img/p*.{jpeg,jpg,png}');
+const totemImages = await resolveTotemImages(images);
+const main = totemImages[0];
+const rest = featured ? totemImages.slice(1) : totemImages;
+const alt = lang === 'id' ? 'Renovasi totem SPBU Pertamina' : 'Pertamina SPBU totem renovation';
+---
+
+{totemImages.length > 0 && (
+  <div class:list={['grid gap-3', featured ? 'grid-cols-2 lg:grid-cols-4' : 'grid-cols-2 sm:grid-cols-3 lg:grid-cols-4 xl:grid-cols-5']}>
+    {featured && main && (
+      <figure class="col-span-2 row-span-2 relative overflow-hidden rounded-sm group bg-navy-100 min-h-[220px] lg:min-h-[360px]">
+        <Image src={main.img} alt={alt} widths={[420, 840, 1200]} sizes="(min-width: 1024px) 50vw, 100vw"
+               loading="lazy" class="h-full w-full object-cover transition-transform duration-500 group-hover:scale-105" />
+        <figcaption class="absolute inset-x-0 bottom-0 p-5 pt-14" style="background:linear-gradient(to top, rgba(16,38,66,.96), rgba(16,38,66,.78) 55%, transparent)">
+          <span class="text-[10px] uppercase tracking-[0.14em] text-gold-300 font-bold">
+            {lang === 'id' ? 'Renovasi Totem SPBU' : 'SPBU Totem Renovation'}
+          </span>
+          <p class="text-white font-semibold text-sm mt-1">
+            {lang === 'id' ? 'Peremajaan totem & penggantian tiang pondasi Pertamina' : 'Pertamina totem refurbishment & foundation pole replacement'}
+          </p>
+        </figcaption>
+      </figure>
+    )}
+    {(featured ? rest : totemImages).map(({ img }, i) => (
+      <figure class="relative overflow-hidden rounded-sm group bg-navy-100">
+        <Image src={img} alt={`${alt} ${i + 1}`} widths={[300, 600]} sizes="(min-width: 1024px) 20vw, 50vw"
+               loading="lazy" class="h-full w-full object-cover aspect-square transition-transform duration-500 group-hover:scale-105" />
+      </figure>
+    ))}
+  </div>
+)}

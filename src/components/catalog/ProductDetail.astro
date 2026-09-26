@@ -88,14 +88,14 @@ const jsonLd = productSchema(
 
       <div class="grid lg:grid-cols-2 gap-10 items-start">
         <div data-reveal="left">
-          <span class="text-[10px] uppercase tracking-[0.18em] text-gold-400 font-bold">
+          <span class="text-[10px] uppercase tracking-[0.18em] text-gold-300 font-bold">
             {categoryLabels[data.category]?.[lang]}
           </span>
           <h1 class="mt-4 text-white font-semibold leading-[1.1] text-[clamp(1.9rem,4vw,3rem)]">{data.title}</h1>
           <p class="mt-5 text-steel-100 leading-relaxed max-w-xl">{data.summary}</p>
 
           {data.pertaminaRelated && (
-            <p class="mt-5 inline-flex items-center gap-2 text-[11px] uppercase tracking-wider text-gold-400 font-bold border border-gold-600/40 rounded-sm px-3 py-1.5">
+            <p class="mt-5 inline-flex items-center gap-2 text-[11px] uppercase tracking-wider text-gold-300 font-bold border border-gold-400/50 rounded-sm px-3 py-1.5">
               <Icon name="shield" size={13} />
               {t('pages.product.pertamina')}
             </p>

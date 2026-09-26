@@ -2,19 +2,8 @@
 import BaseLayout from '../../layouts/BaseLayout.astro';
 import PageHero from '../layout/PageHero.astro';
 import CtaBanner from './CtaBanner.astro';
-import Icon from '../primitives/Icon.astro';
-import { Image } from 'astro:assets';
+import TotemGallery from './TotemGallery.astro';
 import { getCollection } from 'astro:content';
-import projA from '../../assets/img/p07.jpeg';
-import projB from '../../assets/img/p12.jpeg';
-import projC from '../../assets/img/p17.jpeg';
-import projD from '../../assets/img/p24.jpeg';
-const gallery = [
-  { img: projA, alt: { id: 'Peremajaan totem SPBU', en: 'SPBU totem refurbishment' } },
-  { img: projB, alt: { id: 'Renovasi signage SPBU', en: 'SPBU signage renovation' } },
-  { img: projC, alt: { id: 'Pekerjaan fasilitas SPBU', en: 'SPBU facility works' } },
-  { img: projD, alt: { id: 'Signage price board', en: 'Price board signage' } },
-];
 import { useTranslations, type Lang } from '../../i18n/utils';
 
 interface Props { lang: Lang }
@@ -22,7 +11,12 @@ const { lang } = Astro.props;
 const t = useTranslations(lang);
 const projects = (await getCollection('projects', ({ data }) => data.lang === lang && !data.draft))
   .sort((a, b) => a.data.order - b.data.order);
-const spbu = projects.filter((p) => p.data.sector === 'spbu-energy' || p.data.sector === 'maintenance');
+const totemProjects = projects.filter((p) =>
+  p.data.workType === 'totem-renovation' || p.data.workType === 'totem-foundation-pole',
+);
+const spbuOther = projects.filter((p) =>
+  p.data.sector === 'spbu-energy' && p.data.workType !== 'totem-renovation' && p.data.workType !== 'totem-foundation-pole',
+);
 const other = projects.filter((p) => p.data.sector === 'industry' || p.data.sector === 'construction');
 
 const workTypeLabels: Record<string, { id: string; en: string }> = {
@@ -42,45 +36,78 @@ const workTypeLabels: Record<string, { id: string; en: string }> = {
 
   <section class="bg-white">
     <div class="wrap py-16 md:py-20">
-      <h2 class="text-lg font-semibold text-navy-900" data-reveal="up">{t('pages.projects.spbuTitle')}</h2>
-      <div class="mt-8 grid sm:grid-cols-2 lg:grid-cols-3 gap-5" data-reveal="stagger">
-        {spbu.map((p) => (
-          <article class="card p-6 flex flex-col">
-            <span class="text-[10px] uppercase tracking-[0.14em] text-gold-800 font-bold">
-              {workTypeLabels[p.data.workType]?.[lang]}
-            </span>
-            <h3 class="mt-3 font-semibold text-navy-900 leading-snug">{p.data.title}</h3>
-            <dl class="mt-4 space-y-2 text-xs flex-1">
-              <div class="flex gap-2">
-                <dt class="text-navy-600 shrink-0">{t('pages.projects.clientLabel')}:</dt>
-                <dd class="text-navy-900 font-medium">{p.data.clientLabel}</dd>
-              </div>
-              {p.data.location && (
-                <div class="flex gap-2">
-                  <dt class="text-navy-600 shrink-0">Lokasi:</dt>
-                  <dd class="text-navy-900">{p.data.location}</dd>
-                </div>
-              )}
-              {p.data.year && (
-                <div class="flex gap-2">
-                  <dt class="text-navy-600 shrink-0">Tahun:</dt>
-                  <dd class="text-navy-900 specline">{p.data.year}</dd>
-                </div>
-              )}
-            </dl>
-          </article>
-        ))}
+      <div data-reveal="up">
+        <h2 class="text-lg font-semibold text-navy-900">
+          {lang === 'id' ? 'Renovasi & Peremajaan Totem SPBU' : 'SPBU Totem Renovation & Refurbishment'}
+        </h2>
+        <p class="mt-3 max-w-3xl text-sm text-navy-600 leading-relaxed">
+          {lang === 'id'
+            ? 'Dokumentasi pekerjaan renovasi totem, tiang pondasi, dan visual fasilitas SPBU Pertamina yang telah kami tangani.'
+            : 'Documentation of Pertamina SPBU totem, foundation pole, and facility visual renovation works we have delivered.'}
+        </p>
       </div>
 
-      {/* Real project photography */}
-      <div class="mt-12 grid grid-cols-2 lg:grid-cols-4 gap-3" data-reveal="stagger">
-        {gallery.map((im) => (
-          <figure class="relative overflow-hidden rounded-sm bg-navy-100">
-            <Image src={im.img} alt={im.alt[lang]} widths={[300, 600]} sizes="(min-width:1024px) 25vw, 50vw"
-                   loading="lazy" class="h-full w-full object-cover aspect-square" />
-          </figure>
-        ))}
+      <div class="mt-10" data-reveal="up">
+        <TotemGallery lang={lang} featured={false} />
       </div>
+
+      {totemProjects.length > 0 && (
+        <>
+          <h2 class="mt-16 text-lg font-semibold text-navy-900" data-reveal="up">{t('pages.projects.spbuTitle')}</h2>
+          <div class="mt-8 grid sm:grid-cols-2 lg:grid-cols-3 gap-5" data-reveal="stagger">
+            {totemProjects.map((p) => (
+              <article class="card p-6 flex flex-col border-gold-600/30">
+                <span class="text-[10px] uppercase tracking-[0.14em] text-gold-800 font-bold">
+                  {workTypeLabels[p.data.workType]?.[lang]}
+                </span>
+                <h3 class="mt-3 font-semibold text-navy-900 leading-snug">{p.data.title}</h3>
+                <dl class="mt-4 space-y-2 text-xs flex-1">
+                  <div class="flex gap-2">
+                    <dt class="text-navy-600 shrink-0">{t('pages.projects.clientLabel')}:</dt>
+                    <dd class="text-navy-900 font-medium">{p.data.clientLabel}</dd>
+                  </div>
+                  {p.data.location && (
+                    <div class="flex gap-2">
+                      <dt class="text-navy-600 shrink-0">Lokasi:</dt>
+                      <dd class="text-navy-900">{p.data.location}</dd>
+                    </div>
+                  )}
+                  {p.data.year && (
+                    <div class="flex gap-2">
+                      <dt class="text-navy-600 shrink-0">Tahun:</dt>
+                      <dd class="text-navy-900 specline">{p.data.year}</dd>
+                    </div>
+                  )}
+                </dl>
+              </article>
+            ))}
+          </div>
+        </>
+      )}
+
+      {spbuOther.length > 0 && (
+        <>
+          <h2 class="mt-16 text-lg font-semibold text-navy-900" data-reveal="up">
+            {lang === 'id' ? 'Proyek SPBU Lainnya' : 'Other SPBU Projects'}
+          </h2>
+          <div class="mt-8 grid sm:grid-cols-2 lg:grid-cols-3 gap-5" data-reveal="stagger">
+            {spbuOther.map((p) => (
+              <article class="card p-6 flex flex-col">
+                <span class="text-[10px] uppercase tracking-[0.14em] text-gold-800 font-bold">
+                  {workTypeLabels[p.data.workType]?.[lang]}
+                </span>
+                <h3 class="mt-3 font-semibold text-navy-900 leading-snug">{p.data.title}</h3>
+                <dl class="mt-4 space-y-2 text-xs flex-1">
+                  <div class="flex gap-2">
+                    <dt class="text-navy-600 shrink-0">{t('pages.projects.clientLabel')}:</dt>
+                    <dd class="text-navy-900 font-medium">{p.data.clientLabel}</dd>
+                  </div>
+                </dl>
+              </article>
+            ))}
+          </div>
+        </>
+      )}
 
       {other.length > 0 && (
         <>
